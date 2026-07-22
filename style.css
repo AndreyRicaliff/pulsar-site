@@ -1,0 +1,558 @@
+@font-face{font-family:"Inter var";font-style:normal;font-weight:100 900;font-display:swap;src:url(https://cdn.jsdelivr.net/npm/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2) format("woff2");}
+@font-face{font-family:"Space Grotesk var";font-style:normal;font-weight:300 700;font-display:swap;src:url(https://cdn.jsdelivr.net/npm/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2) format("woff2");}
+/* ============================================================
+   MÓDULO 0 — TOKENS
+   Fonte da verdade do design. Trocar marca = trocar este bloco.
+   Medidos do alvo de estudo: mono B/W, tipografia "voz de dado",
+   micro-labels 10-12px com tracking, display 500 lh 1.0.
+   ============================================================ */
+:root{
+  --c-bg:#0E0E16;           /* near-black arroxeado — v3 sóbrio REAL (PULSAR-RH/Finance) */
+  --c-fg:#EAEEF6;           /* texto Pulsar */
+  --c-dim:#9187B6;          /* muted lavanda — o tom de trabalho v3 */
+  --c-faint:rgba(234,238,246,.5);
+  --c-hair:#3C3854;         /* hairline v3 */
+  --c-accent:#401C7F;       /* ROXO v3 SÓBRIO — acento CHAPADO (o vibrante é só energia do pulso) */
+  --c-accent2:#9187B6;      /* lavanda — texto de acento legível no escuro */
+  --c-primary:#401C7F;
+  --c-good:#7FB89C;         /* verde sálvia (positivo) */  --c-warn:#C9A227;  /* dourado AG */
+  --c-surface:#141428; --c-surface2:#1D1B2E;
+  --c-ink:#0E0E16;
+  --grad-pulse:linear-gradient(120deg,#7048E8 0%,#A55EFF 100%);  /* energia do pulso — vibrante SÓ no hero/CTA */
+
+  --f-display:"Space Grotesk var","Inter var","Segoe UI",system-ui,sans-serif;  /* display: Space Grotesk (personalidade); corpo/UI: Inter */
+  --f-body:"Inter var","Inter","Segoe UI",system-ui,sans-serif;
+  --f-mono:"Inter var","Inter","Segoe UI",system-ui,sans-serif;    /* Inter única: label via tracking */
+
+  /* escala tipográfica medida (px @ desktop) */
+  --fs-micro:10px;   /* labels do rail — ls 1px */
+  --fs-data:12px;    /* mono de dado — ls 1.2px */
+  --fs-body:14px;
+  --fs-title:40px;   /* título de work — weight 500, lh 1.0 */
+  --fs-hero:clamp(44px,9vw,128px);
+
+  /* vocabulário de movimento (um só no projeto inteiro) */
+  --ease-soft:cubic-bezier(.22,1,.36,1);
+  --ease-expo:cubic-bezier(.16,1,.3,1);
+  --t-fast:.3s;
+  --t-med:.6s;
+  --t-slow:1s;
+
+  --rail-w:56px;
+  --pad:clamp(20px,4vw,64px);
+}
+
+/* ============================================================
+   MÓDULO 1 — RESET + BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scrollbar-width:thin;scrollbar-color:rgba(64,28,127,.55) #0E0E16}
+body{
+  background:var(--c-bg);color:var(--c-fg);
+  font-family:var(--f-body);font-size:var(--fs-body);line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--c-accent2);color:#0E0E16}
+a{color:inherit;text-decoration:none}
+button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
+img,canvas,svg,video{display:block;max-width:100%}
+
+/* rede de segurança FRACA (sem !important de propósito: !important aqui forçaria loop
+   nos one-shots legítimos dos mesmos elementos). Todo loop intencional declara
+   `infinite` explícito no shorthand; a defesa DURA é o kill-switch do ?static abaixo. */
+*,*::before,*::after{animation-iteration-count:1}
+[class*="spin"],[class*="loading"],[class*="marquee"],[class*="pulse"]{animation-iteration-count:infinite}
+/* ?static=1: congela TUDO no estado final (CSS incluso — o JS seta html[data-static]) */
+html[data-static] *,html[data-static] *::before,html[data-static] *::after{
+  animation:none!important;transition:none!important}
+
+/* ============================================================
+   MÓDULO 2 — CAMADA GL (fundo vivo)
+   Arquitetura-chave do alvo: um canvas WebGL FIXO atrás de tudo
+   (`Layout__gl` + `GLCanvas__container`), DOM transparente por cima.
+   O canvas nunca rola — a CENA reage ao scroll via uniform.
+   ============================================================ */
+.GL{position:fixed;inset:0;z-index:0;pointer-events:none}
+.GL canvas{width:100%;height:100%}
+
+main{position:relative;z-index:1}
+
+/* ============================================================
+   MÓDULO 3 — HEADER + HAMBURGER + SIDE MENU
+   ============================================================ */
+.Header{
+  position:fixed;inset:0 0 auto 0;z-index:40;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px var(--pad);
+  mix-blend-mode:difference;   /* logo legível sobre qualquer fundo */
+}
+.Header__logo{display:flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:14px;letter-spacing:.24em;font-weight:600}
+.Header__logo b{font-weight:400;opacity:.5}
+.PulsarMark{width:24px;height:24px;flex:none}
+.Header__right{display:flex;gap:18px;align-items:center}
+
+.SoundToggle{display:flex;gap:3px;align-items:flex-end;height:14px;width:22px;opacity:.85}
+.SoundToggle i{width:3px;background:#fff;height:4px;transition:height var(--t-fast) var(--ease-soft)}
+.SoundToggle.is-on i:nth-child(1){height:8px}
+.SoundToggle.is-on i:nth-child(2){height:14px}
+.SoundToggle.is-on i:nth-child(3){height:6px}
+
+.Hamburger{width:40px;height:40px;display:grid;place-items:center}
+.Hamburger span{
+  grid-area:1/1;width:22px;height:1.5px;background:#fff;
+  transition:transform var(--t-fast) var(--ease-soft),opacity var(--t-fast)
+}
+.Hamburger span:nth-child(1){transform:translateY(-6px)}
+.Hamburger span:nth-child(3){transform:translateY(6px)}
+/* convenção do alvo: estado SEMPRE por data-attribute, nunca classe modificadora */
+body[data-menu="open"] .Hamburger span:nth-child(1){transform:rotate(45deg)}
+body[data-menu="open"] .Hamburger span:nth-child(2){opacity:0}
+body[data-menu="open"] .Hamburger span:nth-child(3){transform:rotate(-45deg)}
+
+.SideMenu{position:fixed;inset:0;z-index:30;visibility:hidden;pointer-events:none}
+body[data-menu="open"] .SideMenu{visibility:visible;pointer-events:auto}
+.SideMenu__backdrop{
+  position:absolute;inset:0;background:rgba(0,0,0,.55);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  opacity:0;transition:opacity var(--t-med) var(--ease-soft)
+}
+body[data-menu="open"] .SideMenu__backdrop{opacity:1}
+.SideMenu__menu{
+  position:absolute;top:0;right:0;height:100%;width:min(420px,88vw);
+  background:rgba(0,0,0,.82);border-left:1px solid var(--c-hair);
+  padding:110px var(--pad) 48px;display:flex;flex-direction:column;justify-content:space-between;
+  transform:translateX(102%);transition:transform var(--t-med) var(--ease-expo)
+}
+body[data-menu="open"] .SideMenu__menu{transform:none}
+.SideMenu__item{overflow:hidden}
+.SideMenu__item a{
+  display:block;font-family:var(--f-display);font-weight:500;font-size:34px;line-height:1.35;
+  transform:translateY(110%);transition:transform var(--t-med) var(--ease-expo),opacity var(--t-fast)
+}
+.SideMenu__item a i{font-family:var(--f-mono);font-style:normal;font-size:11px;color:#8B5CF6;letter-spacing:.18em;margin-right:16px;vertical-align:.4em}
+.SideMenu__item a{transition:transform var(--t-med) var(--ease-expo),opacity var(--t-fast),color .3s,padding .3s var(--ease-soft)}
+.SideMenu__item a:hover{opacity:1;color:#A78BFA;padding-left:10px}
+.SideMenu__social a:nth-child(1),.SideMenu__social a:nth-child(3){color:#A78BFA;opacity:1}
+body[data-menu="open"] .SideMenu__item a{transform:none;transition-delay:calc(var(--i)*55ms)}
+.SideMenu__social{display:flex;gap:22px}
+.SideMenu__social a{font-family:var(--f-mono);font-size:var(--fs-data);letter-spacing:.12em;opacity:.7}
+.SideMenu__social a:hover{opacity:1}
+
+/* ============================================================
+   MÓDULO 4 — RAIL (indicador de scroll lateral)
+   Réplica do TopScrollIndicator: lista vertical de seções com
+   sub-linhas; a ativa acende e mostra o label.
+   ============================================================ */
+.Rail{
+  position:fixed;top:50%;right:20px;transform:translateY(-50%);z-index:20;
+  display:flex;flex-direction:column;gap:12px;align-items:flex-end;
+}
+/* dot de marca no topo do rail */
+.Rail::before{content:"";width:8px;height:8px;border-radius:50%;margin-bottom:4px;
+  background:radial-gradient(circle,#A78BFA 0%,#7048E8 60%,rgba(112,72,232,0) 72%)}
+.Rail__sec{display:flex;flex-direction:column;gap:7px;align-items:flex-end;cursor:pointer}
+.Rail__line{
+  width:14px;height:2px;border-radius:2px;background:rgba(234,238,246,.16);position:relative;
+  transition:width .45s var(--ease-expo),background .3s ease
+}
+.Rail__label{
+  position:absolute;right:34px;top:50%;transform:translateY(-50%) translateX(6px);
+  font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;
+  color:var(--c-dim);background:rgba(20,20,40,.88);border:1px solid var(--c-hair);border-radius:999px;
+  padding:4px 11px 4px 12px;opacity:0;pointer-events:none;
+  transition:opacity .3s ease,transform .45s var(--ease-expo)
+}
+.Rail__sub{width:6px;height:1.5px;border-radius:1px;background:rgba(234,238,246,.12);
+  transition:width .4s var(--ease-expo),background .3s ease}
+.Rail__sec:hover .Rail__line{background:rgba(167,139,250,.55)}
+.Rail__sec:hover .Rail__label{opacity:1;transform:translateY(-50%) translateX(0)}
+.Rail__sec.is-active .Rail__line{width:30px;background:linear-gradient(90deg,#7048E8,#A55EFF)}
+.Rail__sec.is-active .Rail__label{opacity:1;transform:translateY(-50%) translateX(0);
+  color:#EAEEF6;border-color:rgba(139,110,255,.4)}
+.Rail__sub.is-active{width:14px;background:#A78BFA}
+
+/* ============================================================
+   MÓDULO 5 — LOADING (gate de entrada)
+   Overlay 1×/sessão. Dupla função: percepção de carga E gesto
+   do usuário pra armar o AudioContext (autoplay policy).
+   ============================================================ */
+.Loading{
+  position:fixed;inset:0;z-index:100;
+  background:radial-gradient(120% 85% at 50% 42%,#16112b 0%,#0B0812 52%,#050409 100%);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity 1s var(--ease-soft);
+}
+.Loading.is-done{opacity:0;pointer-events:none}
+.Loading #loading-bg{position:absolute;inset:0;width:100%;height:100%;opacity:.42}
+/* a intro roda num canvas: a LOGO (esfera+feixes) aparece e EMITE o wordmark PULSE */
+.Loading__reveal{display:flex;flex-direction:column;align-items:center;gap:20px}
+/* letras do loading estilizadas junto do hero (.Loading__word) */
+.Loading__center{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.Loading__meta{display:flex;align-items:center;gap:13px;margin-top:12px;opacity:0;animation:load-fade .6s ease 1.5s forwards}
+.Loading__bar{width:150px;height:1px;background:rgba(234,238,246,.14);overflow:hidden}
+.Loading__bar i{display:block;height:100%;background:var(--grad-pulse);width:0;transition:width .25s linear}
+.Loading__pct{font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums;color:var(--c-dim)}
+@keyframes load-fade{to{opacity:1}}
+
+/* ============================================================
+   MÓDULO 6 — SEÇÕES / COREOGRAFIA BASE
+   Padrão do alvo: elementos nascem opacity:0 e a coreografia por
+   scroll os revela. fill BACKWARDS sempre (both retém transform e
+   quebra position:fixed descendente — bug já pago em projeto).
+   ============================================================ */
+.Sec{position:relative;min-height:100vh;padding:0 calc(var(--rail-w) + var(--pad)) 0 var(--pad)}
+.Sec__label{
+  position:absolute;top:26px;left:var(--pad);
+  font-family:var(--f-mono);font-size:var(--fs-data);letter-spacing:.18em;color:var(--c-dim);
+}
+.Sec__label::before{content:"";display:inline-block;width:.95em;height:.95em;margin-right:.5em;vertical-align:-16%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='5.4' fill='none' stroke='%238B5CF6' stroke-width='1' opacity='.5'/%3E%3Cpath d='M1 8 H4.6 l.9 -1.4 l1.1 2.6 l1.3 -5 l1.4 6 l1.1 -3.4 l.6 1.2 H15' fill='none' stroke='%23A55EFF' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center/contain}
+
+.SecTitle{
+  font-family:var(--f-display);font-weight:800;
+  font-size:clamp(56px,11vw,150px);line-height:.92;letter-spacing:-.02em;
+  text-transform:uppercase;
+}
+
+[data-reveal]{opacity:0;transform:translateY(26px);
+  transition:opacity var(--t-slow) var(--ease-expo),transform var(--t-slow) var(--ease-expo);
+  transition-delay:calc(var(--i,0)*70ms)}
+[data-reveal].is-in{opacity:1;transform:none}
+
+/* char-split: cada letra sobe do próprio recorte (power4 via ease-expo) */
+[data-split].is-split{white-space:pre-wrap}
+[data-split] .char{display:inline-block;transform:translateY(1.1em);opacity:0;
+  transition:transform .7s var(--ease-expo),opacity .5s var(--ease-expo)}
+[data-split].is-in .char{transform:none;opacity:1}
+
+/* ============================================================
+   MÓDULO 7 — KV (hero)
+   ============================================================ */
+.Sec--kv{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0}
+.KV__brand{display:flex;flex-direction:column;align-items:center;gap:16px}
+/* BRAND REVEAL: a logo/palavra monta uma letra por vez (pop-out elástico + glow ao pousar) */
+.KV__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.KV__stage{position:relative;display:flex;align-items:center;justify-content:center;width:min(1040px,94vw)}
+/* fundo reinterpreta um elemento da logo: anel gigante, desfocado, baixa opacidade (não compete) */
+.KV__stage::before{content:"";position:absolute;left:50%;top:50%;width:130%;aspect-ratio:1;
+  border-radius:50%;border:2px solid rgba(139,110,255,.06);filter:blur(2px);pointer-events:none;
+  transform:translate(-50%,-50%);animation:kv-ring 9s ease-in-out infinite}
+@keyframes kv-ring{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.05)}}
+/* halo ambiente irradiando de trás (respira) */
+.KV__halo{position:absolute;inset:-46% -12%;pointer-events:none;filter:blur(28px);
+  background:radial-gradient(52% 60% at 50% 50%,rgba(112,72,232,.24),rgba(112,72,232,0) 70%);animation:kv-halo 5s ease-in-out infinite}
+@keyframes kv-halo{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+/* IDENTIDADE: o símbolo ORIGINAL (núcleo + anéis concêntricos + 2 feixes) — execução limpa.
+   INTRO = apenas o símbolo (núcleo assenta, anéis irradiam, feixes emitem);
+   hero mostra o mesmo lockup na mesma posição; o nome chega quando o site inicia. */
+.Lockup{display:flex;flex-direction:column;align-items:center;gap:28px}
+.PM{width:clamp(92px,15vw,150px);height:auto;overflow:visible}
+.PM__ring{opacity:var(--o,1)} /* SEM transform-box/origin: o rotate(-90 48 48) do atributo já tem centro próprio — CSS origin dobraria o deslocamento (bug pago: anéis fora do núcleo) */
+.PM__beam{stroke-dasharray:100.5;stroke-dashoffset:100.5}
+@keyframes wd-draw{to{stroke-dashoffset:0}}
+/* COREOGRAFIA DA INTRO (4 estágios):
+   1. núcleo nasce elástico com FLASH de energia  2. anéis se DESENHAM em arco
+   3. feixes emitem com SWEEP de rotação          4. ping de radar emana em loop */
+@keyframes pmi-glow{0%{filter:drop-shadow(0 0 0 rgba(139,110,255,0))}40%{filter:drop-shadow(0 0 30px rgba(139,110,255,.6))}100%{filter:drop-shadow(0 0 0 rgba(139,110,255,0))}}
+.Lockup--intro .PM__ring{stroke-dasharray:100.5;stroke-dashoffset:100.5;
+  animation:wd-draw .9s cubic-bezier(.5,0,.15,1) .2s forwards}
+.Lockup--intro .PM__ekg{stroke-dasharray:100.5;stroke-dashoffset:100.5;
+  animation:wd-draw .8s cubic-bezier(.5,0,.15,1) .6s forwards}   /* o EKG se traça como um monitor */
+.Lockup--intro .PM__ekg2{opacity:0;animation:pmi-satfade .3s ease 1.6s forwards,ekg-run 2.6s linear 1.7s infinite}
+/* ANIMAÇÃO-PADRÃO DA LOGO (todos os lugares): rotação 2D contínua — os feixes
+   varrem como radar, discreto. Intro e hero com MESMO timing/delay -> fases
+   sincronizadas = transição invisível. */
+/* ANIMAÇÃO-PADRÃO DA LOGO: BATIMENTO CARDÍACO (ciclo 2.6s, fase única em todo o site) —
+   o núcleo dá o lub-dub, o anel de pulso EMANA, e um traço claro PERCORRE o EKG. */
+@keyframes beat-ping{0%{transform:scale(.3);opacity:.6}60%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}
+@keyframes ekg-run{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-100.5}}
+@keyframes label-beat{0%,100%{transform:scale(1)}6%{transform:scale(1.15)}14%{transform:scale(1)}}
+.PM__ping{transform-box:fill-box;transform-origin:center;opacity:0;
+  animation:beat-ping 2.6s cubic-bezier(.16,1,.3,1) 1.7s infinite}
+.PM__ekg{opacity:.9}
+.PM__ekg2{stroke-dasharray:12 88.5;animation:ekg-run 2.6s linear 1.7s infinite}
+.Sec__label::before{animation:label-beat 2.6s ease-in-out 1.7s infinite}
+.Lockup--intro .PM{animation:pmi-glow 1.1s ease .12s}
+@keyframes pmi-satfade{to{opacity:1}}
+
+.Lockup--intro .Lockup__name{opacity:0}  /* intro = SÓ o símbolo (o nome ocupa o espaço p/ alinhar) */
+.Lockup__name{font-family:var(--f-display);font-weight:900;font-size:clamp(44px,9vw,118px);
+  line-height:1;letter-spacing:.14em;text-indent:.14em;color:var(--c-fg)}
+.Lockup--final .PM__beam{stroke-dashoffset:0}
+.Lockup--final .Lockup__name{opacity:0;transform:translateY(10px)}
+body[data-started] .Lockup--final .Lockup__name{opacity:1;transform:none;
+  transition:opacity .9s var(--ease-expo) .25s,transform .9s var(--ease-expo) .25s}
+.KV__by{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:clamp(12px,1.5vw,16px);letter-spacing:.34em;text-transform:uppercase;
+  color:var(--c-dim);opacity:0;transform:translateY(10px);transition:opacity .8s .7s,transform .8s .7s}
+body[data-started] .KV__by{opacity:1;transform:none}
+.KV__by b{color:var(--c-fg);font-weight:600}
+.KV__glyph{width:15px;height:15px;flex:none}
+.KV__grad{font-weight:700;background:var(--grad-pulse);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.KV__slogan{color:var(--c-dim);font-size:14px;letter-spacing:.02em;opacity:0;transition:opacity .8s .95s}
+body[data-started] .KV__slogan{opacity:.85}
+.KV__scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);text-align:center;
+  font-family:var(--f-mono);font-size:var(--fs-data);letter-spacing:.16em;text-transform:uppercase;color:var(--c-faint);
+  opacity:0;transition:opacity .8s 1.15s}
+body[data-started] .KV__scroll{opacity:1}
+.KV__scroll i{display:block;margin-top:5px;font-style:normal;animation:kv-nudge 1.8s var(--ease-soft) infinite}
+@keyframes kv-nudge{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(6px);opacity:1}}
+
+/* ============================================================
+   MÓDULO 8 — WORKS (lista editorial + thumb generativa)
+   Estrutura do alvo: lista de texto e camada de thumbs SEPARADAS
+   (Works__list vs Works__scroll_item_thumb) — o hover no texto
+   materializa a mídia, não o contrário.
+   ============================================================ */
+.Sec--works{padding-top:14vh;padding-bottom:14vh}
+.Works__list{list-style:none;margin-top:9vh;position:relative;z-index:2}
+.Works__item{border-top:1px solid var(--c-hair);padding:26px 0;display:grid;
+  grid-template-columns:110px 1fr auto;gap:8px 28px;align-items:baseline}
+.Works__item:last-child{border-bottom:1px solid var(--c-hair)}
+.Works__date{font-family:var(--f-mono);font-size:var(--fs-data);color:var(--c-dim);display:flex;flex-direction:column;gap:2px}
+.Works__date b{font-weight:400;color:#fff}
+.Works__title{grid-column:2;font-family:var(--f-display);font-weight:500;
+  font-size:clamp(26px,3.4vw,var(--fs-title));line-height:1;
+  transition:opacity var(--t-fast),letter-spacing var(--t-med) var(--ease-soft)}
+.Works__item:hover .Works__title{opacity:.65;letter-spacing:.02em}
+.Works__sub{grid-column:2;color:var(--c-dim);font-size:13px}
+/* o ÚNICO uso do acento em todo o sistema — disciplina medida do alvo */
+.Works__impression{grid-column:3;grid-row:1;font-family:var(--f-mono);font-size:11px;
+  color:var(--c-accent2);border:1px solid color-mix(in srgb,var(--c-accent) 60%,transparent);
+  padding:3px 10px;white-space:nowrap}
+.Works__tags{grid-column:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.Works__tag{font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.08em;
+  color:var(--c-dim);border:1px solid var(--c-hair);border-radius:999px;padding:3px 10px}
+.Works__more{display:inline-block;margin-top:34px;font-family:var(--f-mono);
+  font-size:var(--fs-data);letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--c-hair);padding:14px 34px;transition:background var(--t-fast),color var(--t-fast)}
+.Works__more:hover{background:var(--grad-pulse);color:#0E0E16;border-color:transparent}
+
+.Works__thumb{
+  position:fixed;z-index:1;width:min(380px,32vw);aspect-ratio:16/10;
+  pointer-events:none;opacity:0;transition:opacity var(--t-fast) var(--ease-soft);
+  border:1px solid var(--c-hair);background:#000;
+}
+.Works__thumb.is-on{opacity:1}
+.Works__thumb canvas{width:100%;height:100%}
+.Works__thumb figcaption{
+  position:absolute;left:0;bottom:-24px;font-family:var(--f-mono);
+  font-size:var(--fs-micro);letter-spacing:.12em;color:var(--c-dim)}
+
+/* ============================================================
+   MÓDULO 9 — MISSION / VISION (statement bilíngue)
+   Padrão do alvo: PT grande linha-a-linha com marcador, EN como
+   eco menor. Reveal por linha (overflow hidden + translateY).
+   ============================================================ */
+.Sec--mv{display:flex;flex-direction:column;justify-content:center;gap:34px;
+  transition:color .5s ease}
+.MV__text{font-family:var(--f-display);font-weight:500;font-size:clamp(28px,4.6vw,58px);line-height:1.3}
+.MV__line{display:block;overflow:hidden}
+.MV__line>span{display:inline-block;transform:translateY(115%);transition:transform .8s var(--ease-expo)}
+.MV__line.is-in>span{transform:none}
+/* marca-texto animável (técnica do alvo): background-size 0%→100% varre a linha */
+.Sec--mv{--mk:var(--c-accent2);--mk-fg:#0E0E16}
+.MV__marker{
+  background-image:linear-gradient(var(--mk),var(--mk));
+  background-size:0% 100%;background-repeat:no-repeat;background-position:0 50%;
+  padding:0 .12em;
+  transition:color .2s .1s;
+}
+.MV__line.is-in .MV__marker{
+  background-size:100% 100%;color:var(--mk-fg);
+  transition:background-size .6s .3s var(--ease-soft),color .25s .55s;
+}
+.MV__en{color:var(--c-dim);font-size:15px;max-width:460px;line-height:1.7;transition:color .5s ease}
+
+/* TEMA CLARO POR SEÇÃO (técnica do alvo): a cena GL clareia em
+   mission/vision e o DOM flipa junto — dirigido por body[data-section].
+   Header e rail não precisam de regra: mix-blend-mode:difference resolve. */
+/* Pulsar: em mission/vision o cosmos "achata" p/ o grid/radar via POV (uMorph no shader) — texto segue claro */
+
+/* ============================================================
+   MÓDULO 12 — OUTRO (canvas de encerramento) + FOOTER
+   ============================================================ */
+.Sec--outro{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;text-align:center}
+.Outro__canvas{width:min(860px,92vw);height:min(300px,34vh)}
+.Outro__cta{font-family:var(--f-mono);font-size:var(--fs-data);letter-spacing:.2em;text-transform:uppercase;
+  border:1px solid var(--c-hair);padding:16px 40px;transition:background var(--t-fast),color var(--t-fast)}
+.Outro__cta:hover{background:var(--grad-pulse);color:#fff;border-color:transparent}
+.Outro__mfx{max-width:620px;text-align:center;font-size:15.5px;line-height:1.85;color:#cfcbe0}
+.Outro__mfx b{color:var(--c-fg)}
+.Outro__mfx span{display:block;margin-top:12px;color:var(--c-dim);font-size:13.5px}
+.Outro__ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.Outro__cta--primary{background:var(--grad-pulse);border-color:transparent;border-radius:999px;color:#fff;box-shadow:0 12px 40px rgba(112,72,232,.35)}
+.Outro__firm{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;color:var(--c-faint);text-transform:uppercase}
+
+.Footer{position:relative;z-index:1;border-top:1px solid var(--c-hair);
+  padding:54px var(--pad) 34px;display:flex;flex-wrap:wrap;gap:44px;justify-content:space-between}
+.Footer__col{display:flex;flex-direction:column;gap:9px;min-width:130px}
+.Footer__head{font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--c-dim);margin-bottom:6px}
+.Footer__col a{font-size:13px;color:#e8e8e8;position:relative;align-self:flex-start}
+.Footer__col a::after{content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right center;transition:transform .35s var(--ease-soft)}
+.Footer__col a:hover::after{transform:scaleX(1);transform-origin:left center}
+.Footer__brand{width:100%;display:flex;justify-content:space-between;align-items:baseline;
+  border-top:1px solid var(--c-hair);padding-top:22px;margin-top:8px}
+.Footer__logo{font-family:var(--f-mono);letter-spacing:.3em;font-size:14px}
+.Footer__copy{font-family:var(--f-mono);font-size:var(--fs-micro);color:var(--c-dim)}
+
+/* ============================================================
+   MÓDULO 13 — RESPONSIVO
+   min-w-0 nos filhos de grid/flex; rail some no mobile.
+   ============================================================ */
+.Sec>*{min-width:0}
+/* ============================================================
+   MÓDULO 12c — SERVICE ribbon: coverflow 3D lateral (POV que desliza)
+   Cards de serviço numa curva horizontal; scroll gira o "coverflow".
+   ============================================================ */
+.Sec--service{height:250vh;min-height:0;padding:0;display:block}
+.Ribbon__sticky{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1250px;
+  perspective-origin:50% 44%;display:flex;align-items:center;justify-content:center}
+.Ribbon__sticky>.Sec__label{position:absolute;top:26px;left:var(--pad);z-index:6}
+.Ribbon__title{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:4;
+  font-family:var(--f-display);font-weight:800;font-size:clamp(34px,7vw,72px);letter-spacing:-.02em;
+  text-transform:uppercase;color:rgba(234,238,246,.06);pointer-events:none}
+.Ribbon{position:absolute;inset:0;transform-style:preserve-3d}
+.Svc{position:absolute;top:50%;left:50%;width:min(900px,92vw);
+  transform:translate(-50%,-50%);transform-style:preserve-3d;will-change:transform,opacity,filter;
+  display:grid;grid-template-columns:1.12fr .88fr;
+  border:1px solid var(--c-hair);border-radius:18px;overflow:hidden;background:var(--c-surface);
+  box-shadow:0 46px 150px rgba(0,0,0,.66),0 0 0 1px rgba(112,72,232,.08);backface-visibility:hidden;
+  transition:box-shadow .4s ease,border-color .4s ease}
+.Svc.is-focus{border-color:rgba(139,110,255,.4);box-shadow:0 50px 170px rgba(0,0,0,.7),0 0 90px rgba(112,72,232,.28),0 0 0 1px rgba(139,110,255,.18)}
+.Svc__screen{background:#0c0b14;border-right:1px solid var(--c-hair);padding:16px;
+  min-height:352px;display:flex;flex-direction:column;gap:11px}
+.Svc__info{padding:26px 26px 22px;display:flex;flex-direction:column;gap:11px}
+.Svc__idx{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--c-accent2)}
+.Svc__name{font-family:var(--f-display);font-weight:800;font-size:30px;letter-spacing:-.02em;line-height:1.05}
+.Svc__name b{color:var(--c-dim);font-weight:500}
+.Svc__tagline{color:var(--c-dim);font-size:14px;line-height:1.5}
+.Svc__ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:2px}
+.Svc__ul li{display:flex;gap:9px;font-size:12.5px;color:#cfcbe0;line-height:1.4}
+.Svc__ul li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-accent2);margin-top:5px;flex:none}
+.Svc__chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.Svc__chip{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;color:var(--c-dim);
+  border:1px solid var(--c-hair);border-radius:999px;padding:3px 10px}
+.Ribbon__hud{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:6;
+  display:flex;gap:14px;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--c-dim)}
+.Ribbon__dots{display:flex;gap:8px}
+.Ribbon__dots i{width:8px;height:8px;border-radius:50%;background:var(--c-hair);transition:.3s}
+.Ribbon__dots i.on{background:var(--c-accent2);transform:scale(1.3)}
+.Svc--custom{grid-template-columns:1fr;background:#F5F3FA;color:#141428;border-color:#E3DEF0}  /* tema BRANCO (white-label) */
+.Svc--custom .Svc__idx{color:#7048E8}
+.Svc--custom .Cst__name{color:#141428}
+.Svc--custom .Cst__name span{color:#7048E8}
+.Svc--custom .Cst__tagline{color:#5A5670}
+.Svc--custom .Cst__tagline b{color:#141428}
+.Svc--custom .Cst__b{background:#FFFFFF;border-color:#E3DEF0}
+.Svc--custom .Cst__b:hover{border-color:#7048E8;background:#FBFAFF}
+.Svc--custom .Cst__ic{color:#7048E8}
+.Svc--custom .Cst__b h4{color:#141428}
+.Svc--custom .Cst__b p{color:#6B6B80}
+.Svc--custom .Cst__note{color:#8A8A9E}
+.Sec--custom{display:flex;flex-direction:column;justify-content:center;padding-top:12vh;padding-bottom:12vh}
+.CustomCard{width:min(1000px,100%);margin:0 auto;border:1px solid #E3DEF0;border-radius:20px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.5)}
+.Cst{padding:30px 34px;display:flex;flex-direction:column;gap:16px;min-height:352px}
+.Cst__head{display:flex;flex-direction:column;gap:7px}
+.Cst__name{font-family:var(--f-display);font-weight:800;font-size:40px;letter-spacing:-.02em;line-height:1}
+.Cst__name span{color:var(--c-accent2);font-weight:500}
+.Cst__tagline{color:var(--c-dim);font-size:14px;line-height:1.55;max-width:660px}
+.Cst__tagline b{color:var(--c-fg)}
+.Cst__benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.Cst__b{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border:1px solid var(--c-hair);border-radius:13px;
+  background:rgba(112,72,232,.06);transition:border-color .25s,background .25s}
+.Cst__b:hover{border-color:rgba(139,110,255,.35);background:rgba(112,72,232,.1)}
+.Cst__ic{width:26px;height:26px;color:var(--c-accent2)}
+.Cst__b h4{font-size:13.5px;font-weight:700;letter-spacing:.01em;color:var(--c-fg)}
+.Cst__b p{font-size:11.5px;color:var(--c-dim);line-height:1.45}
+.Cst__foot{display:flex;align-items:center;gap:18px;margin-top:auto;flex-wrap:wrap}
+.Cst__cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:15px;
+  letter-spacing:.01em;color:#fff;background:var(--grad-pulse);border-radius:999px;padding:13px 28px;
+  box-shadow:0 12px 40px rgba(112,72,232,.38);transition:transform .2s var(--ease-soft),box-shadow .2s}
+.Cst__cta:hover{transform:translateY(-2px);box-shadow:0 20px 58px rgba(112,72,232,.55)}
+.Cst__cta span{transition:transform .2s}
+.Cst__cta:hover span{transform:translateX(5px)}
+.Cst__note{font-size:11px;color:var(--c-faint);letter-spacing:.02em;max-width:260px}
+@media (max-width:768px){ .Cst__benefits{grid-template-columns:1fr} .Cst{padding:22px} }
+@media (max-width:768px){ .Svc:not(.Svc--custom){grid-template-columns:1fr} .Svc{width:92vw} .Svc__screen{min-height:220px} }
+
+/* ============================================================
+   MÓDULO 12b — SHOWCASE: galeria 3D com POV travel (dolly por telas)
+   Câmera "voa" por um corredor de telas mockup dos produtos Pulsar.
+   Telas = DOM real com 3D transforms; scroll dirige o translateZ do palco.
+   ============================================================ */
+.Sec--showcase{height:380vh;min-height:0;padding:0;display:block}
+.Showcase__sticky{position:sticky;top:0;height:100vh;overflow:hidden;
+  perspective:1500px;perspective-origin:50% 45%;display:flex;align-items:center;justify-content:center}
+.Showcase__sticky>.Sec__label{position:absolute;top:26px;left:var(--pad);z-index:6}
+.Showcase__stage{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.Screen{
+  position:absolute;top:50%;left:50%;width:min(660px,86vw);aspect-ratio:16/10;
+  transform:translate(-50%,-50%) translateX(var(--sx,0)) translateZ(calc(var(--i)*-780px)) rotateY(var(--ry,0));
+  border:1px solid var(--c-hair);border-radius:14px;overflow:hidden;background:var(--c-surface);
+  box-shadow:0 40px 130px rgba(0,0,0,.6), 0 0 0 1px rgba(112,72,232,.08);
+  backface-visibility:hidden;will-change:opacity,filter;
+}
+.Screen__bar{display:flex;align-items:center;gap:9px;padding:11px 15px;border-bottom:1px solid var(--c-hair);
+  background:linear-gradient(var(--c-surface2),var(--c-surface))}
+.Screen__mark{width:19px;height:19px;flex:none}
+.Screen__title{font-size:12.5px;font-weight:700;letter-spacing:.01em}
+.Screen__title b{color:var(--c-dim);font-weight:500}
+.Screen__ekg{width:52px;height:14px;opacity:.7}
+.Screen__tag{margin-left:auto;font-size:10px;color:var(--c-dim);text-transform:uppercase;letter-spacing:.15em}
+.Screen__body{padding:15px;display:flex;flex-direction:column;gap:11px;height:calc(100% - 43px)}
+/* mini-componentes de produto (v3 sóbrio) */
+.mk-kpi{background:var(--c-surface2);border:1px solid var(--c-hair);border-top:2px solid var(--c-accent);
+  border-radius:10px;padding:11px 14px}
+.mk-kpi .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--c-dim)}
+.mk-kpi .val{font-size:27px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05;margin-top:2px}
+.mk-kpi .dl{font-size:11px;color:var(--c-good);font-variant-numeric:tabular-nums;margin-top:2px}
+.mk-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mk-mini{background:var(--c-surface2);border:1px solid var(--c-hair);border-radius:9px;padding:8px 10px}
+.mk-mini .lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--c-dim)}
+.mk-mini .val{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:1px}
+.mk-mini .val.good{color:var(--c-good)}
+.mk-chart{background:var(--c-surface2);border:1px solid var(--c-hair);border-radius:10px;padding:10px 12px;
+  display:flex;flex-direction:column;gap:6px;flex:1;min-height:0}
+.mk-chart .cttl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--c-dim)}
+.mk-chart svg{width:100%;flex:1;min-height:0}
+.mk-table{width:100%;border-collapse:collapse;font-size:12px}
+.mk-table td{padding:5.5px 3px;border-bottom:1px solid var(--c-hair)}
+.mk-table td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.mk-table tr.neg td{color:var(--c-dim)}
+.mk-table tr.tot td{color:#fff;font-weight:800;border-bottom:none;border-top:1px solid var(--c-hair);padding-top:8px}
+.mk-table tr.tot td:last-child{color:var(--c-accent2)}
+.mk-flex{display:flex;gap:12px;align-items:center}
+.mk-donut{flex:none}
+.mk-legend{display:flex;flex-direction:column;gap:5px;font-size:11px}
+.mk-legend span{display:flex;align-items:center;gap:7px;color:var(--c-dim)}
+.mk-legend i{width:9px;height:9px;border-radius:2px;flex:none}
+.mk-legend b{color:var(--c-fg);font-weight:700;font-variant-numeric:tabular-nums;margin-left:auto}
+.mk-avatars{display:flex;padding-left:6px}
+.mk-av{width:28px;height:28px;border-radius:50%;border:2px solid var(--c-surface);margin-left:-6px;
+  display:grid;place-items:center;font-size:10px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,#401C7F,#9187B6)}
+.mk-bars{display:flex;flex-direction:column;gap:8px}
+.mk-bar{display:grid;grid-template-columns:130px 1fr 38px;gap:9px;align-items:center;font-size:11px;color:var(--c-dim)}
+.mk-bar .track{height:7px;background:var(--c-hair);border-radius:4px;overflow:hidden}
+.mk-bar .fill{height:100%;background:linear-gradient(90deg,#401C7F,#7048E8);border-radius:4px}
+.mk-bar .pct{text-align:right;color:var(--c-fg);font-weight:700;font-variant-numeric:tabular-nums}
+.Showcase__hud{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:6;
+  display:flex;gap:16px;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--c-dim)}
+.Mock__tag{font-size:8px;letter-spacing:.14em;color:var(--c-faint);border:1px solid var(--c-hair);border-radius:999px;padding:2px 8px}
+.Showcase__dots{display:flex;gap:7px}
+.Showcase__dots i{width:7px;height:7px;border-radius:50%;background:var(--c-hair);transition:background .3s,transform .3s}
+.Showcase__dots i.on{background:var(--c-accent2);transform:scale(1.35)}
+
+@media (max-width:768px){ /* breakpoint único, como no alvo (769px) */
+  .Sec--showcase{height:340vh}
+  .Screen{width:90vw}
+  .Screen .val{font-size:22px}
+  .Works__item{grid-template-columns:1fr;gap:6px}
+  .Works__impression{grid-column:1;grid-row:auto;justify-self:start}
+  .Works__thumb{display:none}
+  .Rail{display:none}
+  .Sec{padding-right:var(--pad)}
+}

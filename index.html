@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<meta name="robots" content="noindex">  <!-- tirar quando os contatos reais entrarem -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulsar — Sinta o pulso da sua operação</title>
+<meta name="description" content="Pulsar — a plataforma de gestão da AG. RH e Finance sobre uma fundação viva: multi-tenant, tempo real, o pulso do seu negócio em cada tela.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='none' stroke='%238B5CF6' stroke-width='1.6' opacity='.45'/><path d='M2 16 H10 l2 -3 l2.5 5.5 l3 -10 l3.5 12 l2.5 -7 l1.5 2.5 H30' stroke='%23A55EFF' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOADING: gate de entrada — progresso + escolha de som -->
+<div class="Loading" id="loading" role="dialog" aria-label="PULSAR — carregando">
+  <canvas id="loading-bg" aria-hidden="true"></canvas>
+  <div class="Loading__center">
+    <div class="Loading__reveal">
+      <div class="Lockup Lockup--intro"><svg class="PM" viewBox="0 0 96 96" role="img" aria-label="símbolo Pulsar"><defs><linearGradient id="pmgL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7048E8"/><stop offset="1" stop-color="#A55EFF"/></linearGradient></defs><circle class="PM__ring" pathLength="100" transform="rotate(-90 48 48)" style="--o:.4" cx="48" cy="48" r="30" fill="none" stroke="#8B5CF6" stroke-width="1.6"/><circle class="PM__ping" cx="48" cy="48" r="12" fill="none" stroke="#A78BFA" stroke-width="1.5"/><path class="PM__ekg" pathLength="100" d="M4 48 H30 l5 -7 l6 13 l7 -25 l8 34 l6 -19 l4 4 H92" stroke="url(#pmgL)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path class="PM__ekg2" pathLength="100" d="M4 48 H30 l5 -7 l6 13 l7 -25 l8 34 l6 -19 l4 4 H92" stroke="#EAEEF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><div class="Lockup__name">PULSAR</div></div>
+    </div>
+    <p class="KV__sr">PULSAR — por AG Consultoria</p>
+    <div class="Loading__meta"><div class="Loading__bar"><i id="load-bar"></i></div><span class="Loading__pct"><span id="load-pct">0</span>%</span></div>
+  </div>
+</div>
+
+<!-- CAMADA GL: canvas fixo atrás de todo o DOM -->
+<div class="GL" aria-hidden="true"><canvas id="gl"></canvas></div>
+
+<header class="Header">
+  <a class="Header__logo" href="#top" aria-label="PULSAR — início">
+    <svg class="PulsarMark" viewBox="0 0 26 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <circle class="PM__ring" style="--o:.35" cx="13" cy="13" r="9.5" stroke-width="1"/>
+      <circle class="PM__ping" cx="13" cy="13" r="4" stroke-width="1" fill="none"/>
+      <path class="PM__ekg" d="M1 13 H8 l1.5 -2.5 l2 4.5 l2 -8 l2.5 10.5 l2 -6 l1 2 H25" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span>PULSAR<b>®</b></span>
+  </a>
+  <div class="Header__right">
+    <button class="SoundToggle" id="btn-sound" aria-label="alternar som"><i></i><i></i><i></i></button>
+    <button class="Hamburger" id="btn-menu" aria-label="abrir menu" aria-expanded="false" aria-controls="side-menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="SideMenu" id="side-menu">
+  <div class="SideMenu__backdrop" id="menu-backdrop"></div>
+  <nav class="SideMenu__menu" aria-label="menu principal">
+    <div>
+      <div class="SideMenu__item" style="--i:0"><a href="#top"><i>01</i>Início</a></div>
+      <div class="SideMenu__item" style="--i:1"><a href="#works"><i>02</i>Produtos</a></div>
+      <div class="SideMenu__item" style="--i:2"><a href="#mission"><i>03</i>Missão</a></div>
+      <div class="SideMenu__item" style="--i:3"><a href="#service"><i>04</i>Serviços</a></div>
+      <div class="SideMenu__item" style="--i:4"><a href="#custom"><i>05</i>Sob medida</a></div>
+      <div class="SideMenu__item" style="--i:5"><a href="#contact"><i>06</i>Contato</a></div>
+    </div>
+    <div class="SideMenu__social">
+      <a href="#" rel="noopener">INSTAGRAM</a>
+      <a href="#" rel="noopener">LINKEDIN</a>
+      <a href="#" rel="noopener">WHATSAPP</a>
+    </div>
+  </nav>
+</div>
+
+<div class="Rail" id="rail" aria-hidden="true"></div>
+
+<main id="main">
+
+  <!-- ===================== KV / HERO ===================== -->
+  <section class="Sec Sec--kv" id="top" data-sec="início" data-subs="2">
+    <div class="KV__brand">
+      <div class="KV__stage"><div class="KV__halo" aria-hidden="true"></div><div class="Lockup Lockup--final"><svg class="PM" viewBox="0 0 96 96" role="img" aria-label="símbolo Pulsar"><defs><linearGradient id="pmgH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7048E8"/><stop offset="1" stop-color="#A55EFF"/></linearGradient></defs><circle class="PM__ring" pathLength="100" transform="rotate(-90 48 48)" style="--o:.4" cx="48" cy="48" r="30" fill="none" stroke="#8B5CF6" stroke-width="1.6"/><circle class="PM__ping" cx="48" cy="48" r="12" fill="none" stroke="#A78BFA" stroke-width="1.5"/><path class="PM__ekg" pathLength="100" d="M4 48 H30 l5 -7 l6 13 l7 -25 l8 34 l6 -19 l4 4 H92" stroke="url(#pmgH)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path class="PM__ekg2" pathLength="100" d="M4 48 H30 l5 -7 l6 13 l7 -25 l8 34 l6 -19 l4 4 H92" stroke="#EAEEF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><div class="Lockup__name">PULSAR</div></div><h1 class="KV__sr">PULSAR</h1></div>
+      <div class="KV__by"><svg class="KV__glyph" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="PM__ring" style="--o:.5" cx="9" cy="9" r="6.4" stroke="#8B5CF6" stroke-width="1"/><path class="PM__ekg" d="M.5 9 H5 l1 -1.6 l1.3 3 l1.4 -5.8 l1.6 7 l1.3 -4 l.7 1.4 H17.5" stroke="#A55EFF" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>por <b class="KV__grad">AG CONSULTORIA</b></span></div>
+      <div class="KV__slogan">Sinta o pulso da sua operação</div>
+    </div>
+    <div class="KV__scroll">explorar<i>&darr;</i></div>
+  </section>
+
+  <!-- ===================== WORKS ===================== -->
+  <section class="Sec Sec--works" id="works" data-sec="produtos" data-subs="5" data-sound="works">
+    <span class="Sec__label" data-reveal>produtos</span>
+    <h2 class="SecTitle" data-distort>PRODUTOS</h2>
+    <ol class="Works__list" id="works-list">
+      <li class="Works__item" data-reveal style="--i:0" data-thumb="finance">
+        <span class="Works__date"><b>01</b><span>finance</span></span>
+        <a class="Works__title" href="#" data-split>PULSAR FINANCE</a>
+        <span class="Works__impression">o caixa pulsando</span>
+        <span class="Works__sub">O financeiro da sua empresa vivo — clareza para decidir todo dia</span>
+        <span class="Works__tags">
+          <i class="Works__tag">clareza</i><i class="Works__tag">tempo real</i><i class="Works__tag">decisão</i>
+        </span>
+      </li>
+      <li class="Works__item" data-reveal style="--i:1" data-thumb="rh">
+        <span class="Works__date"><b>02</b><span>rh</span></span>
+        <a class="Works__title" href="#" data-split>PULSAR-RH</a>
+        <span class="Works__impression">o pulso da equipe</span>
+        <span class="Works__sub">Pessoas engajadas e gestão leve — o pulso da equipe sempre à vista</span>
+        <span class="Works__tags">
+          <i class="Works__tag">pessoas</i><i class="Works__tag">engajamento</i><i class="Works__tag">leveza</i>
+        </span>
+      </li>
+      <li class="Works__item" data-reveal style="--i:2" data-thumb="lider">
+        <span class="Works__date"><b>03</b><span>tempo real</span></span>
+        <a class="Works__title" href="#" data-split>FLUXO EM TEMPO REAL</a>
+        <span class="Works__impression">na hora, não no fim do mês</span>
+        <span class="Works__sub">O que acontece no negócio aparece na hora — sem esperar o fim do mês</span>
+        <span class="Works__tags">
+          <i class="Works__tag">na hora</i><i class="Works__tag">sem espera</i><i class="Works__tag">confiança</i>
+        </span>
+      </li>
+      <li class="Works__item" data-reveal style="--i:3" data-thumb="beto">
+        <span class="Works__date"><b>04</b><span>integração</span></span>
+        <a class="Works__title" href="#" data-split>TUDO CONECTADO</a>
+        <span class="Works__impression">no mesmo pulso</span>
+        <span class="Works__sub">Suas fontes de dados unidas num só lugar — sem retrabalho</span>
+        <span class="Works__tags">
+          <i class="Works__tag">unificado</i><i class="Works__tag">automático</i><i class="Works__tag">seguro</i>
+        </span>
+      </li>
+      <li class="Works__item" data-reveal style="--i:4" data-thumb="hub">
+        <span class="Works__date"><b>05</b><span>painéis</span></span>
+        <a class="Works__title" href="#" data-split>PAINÉIS VIVOS</a>
+        <span class="Works__impression">KPIs que respiram</span>
+        <span class="Works__sub">O número que importa, sempre atual — do resumo ao detalhe</span>
+        <span class="Works__tags">
+          <i class="Works__tag">visão clara</i><i class="Works__tag">sempre atual</i><i class="Works__tag">detalhe</i>
+        </span>
+      </li>
+    </ol>
+    <a class="Works__more" href="#" data-reveal data-scramble>Toda a plataforma</a>
+    <figure class="Works__thumb" id="works-thumb">
+      <canvas id="thumb-canvas" aria-hidden="true"></canvas>
+      <figcaption id="thumb-caption">—</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== SHOWCASE — galeria 3D (POV travel por telas Pulsar) ===================== -->
+  <section class="Sec Sec--showcase" id="showcase" data-sec="por dentro" data-subs="4" data-sound="works">
+    <div class="Showcase__sticky">
+      <span class="Sec__label" data-reveal>por dentro</span>
+      <div class="Showcase__stage" id="showcase-stage">
+
+        <!-- 1 · PULSAR FINANCE — Dashboard -->
+        <figure class="Screen" style="--i:0;--sx:-120px;--ry:7deg" data-cap="Pulsar Finance · painel">
+          <div class="Screen__bar">
+            <svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#7048E8" stroke-width="1.3"/><path d="M6 12 H9.5 L11 8.5 L13.5 15.5 L15 12 H18" stroke="#EAEEF6" stroke-width="1.2"/></svg>
+            <span class="Screen__title">Pulsar <b>Finance</b></span>
+            <span class="Screen__tag">painel</span>
+          </div>
+          <div class="Screen__body">
+            <div class="mk-kpi"><div class="lbl">Faturamento · Julho</div><div class="val">R$ 1.248.320</div><div class="dl">▲ 12,4% vs. junho</div></div>
+            <div class="mk-row">
+              <div class="mk-mini"><div class="lbl">Margem líq.</div><div class="val good">32,4%</div></div>
+              <div class="mk-mini"><div class="lbl">Despesas</div><div class="val">R$ 421k</div></div>
+              <div class="mk-mini"><div class="lbl">Saldo</div><div class="val">R$ 318k</div></div>
+            </div>
+            <div class="mk-chart"><div class="cttl">Fluxo de caixa · 8 semanas</div>
+              <svg viewBox="0 0 300 70" preserveAspectRatio="none">
+                <polyline points="0,58 43,50 86,55 129,38 172,43 215,24 258,30 300,12 300,70 0,70" fill="#7048E81f" stroke="none"/>
+                <polyline points="0,58 43,50 86,55 129,38 172,43 215,24 258,30 300,12" fill="none" stroke="#7048E8" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+        </figure>
+
+        <!-- 2 · PULSAR FINANCE — DRE -->
+        <figure class="Screen" style="--i:1;--sx:130px;--ry:-7deg" data-cap="Pulsar Finance · DRE do mês">
+          <div class="Screen__bar">
+            <svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#7048E8" stroke-width="1.3"/><path d="M6 12 H9.5 L11 8.5 L13.5 15.5 L15 12 H18" stroke="#EAEEF6" stroke-width="1.2"/></svg>
+            <span class="Screen__title">Pulsar <b>Finance</b></span>
+            <span class="Screen__tag">DRE · competência</span>
+          </div>
+          <div class="Screen__body">
+            <table class="mk-table">
+              <tr><td>Receita bruta</td><td>1.612.900</td></tr>
+              <tr class="neg"><td>(–) Deduções</td><td>364.580</td></tr>
+              <tr><td>Receita líquida</td><td>1.248.320</td></tr>
+              <tr class="neg"><td>(–) CMV</td><td>402.110</td></tr>
+              <tr><td>Lucro bruto</td><td>846.210</td></tr>
+              <tr class="neg"><td>(–) Despesas op.</td><td>421.400</td></tr>
+              <tr class="tot"><td>EBITDA · margem 34,0%</td><td>424.810</td></tr>
+            </table>
+          </div>
+        </figure>
+
+        <!-- 3 · PULSAR-RH — Dashboard -->
+        <figure class="Screen" style="--i:2;--sx:-120px;--ry:7deg" data-cap="Pulsar-RH · gestão de pessoas">
+          <div class="Screen__bar">
+            <svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2.6 L20 12 L12 21.4 L4 12 Z" stroke="#7048E8" stroke-width="1.3"/><circle cx="12" cy="10" r="2.2" fill="#EAEEF6"/><path d="M7.8 17 a4.2 3.6 0 0 1 8.4 0 Z" fill="#EAEEF6"/></svg>
+            <span class="Screen__title">Pulsar<b>-RH</b></span>
+            <span class="Screen__tag">pessoas</span>
+          </div>
+          <div class="Screen__body">
+            <div class="mk-row">
+              <div class="mk-mini"><div class="lbl">Colaboradores</div><div class="val">142</div></div>
+              <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div></div>
+              <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div></div>
+            </div>
+            <div class="mk-chart"><div class="cttl">Headcount por setor</div>
+              <div class="mk-flex">
+                <svg class="mk-donut" viewBox="0 0 84 84" width="84" height="84">
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#3C3854" stroke-width="10"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#401C7F" stroke-width="10" stroke-dasharray="86 195" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7048E8" stroke-width="10" stroke-dasharray="52 195" stroke-dashoffset="-86" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7FB89C" stroke-width="10" stroke-dasharray="33 195" stroke-dashoffset="-138" transform="rotate(-90 42 42)"/>
+                </svg>
+                <div class="mk-legend">
+                  <span><i style="background:#401C7F"></i>Operação <b>64</b></span>
+                  <span><i style="background:#7048E8"></i>Comercial <b>38</b></span>
+                  <span><i style="background:#7FB89C"></i>Adm/Financeiro <b>24</b></span>
+                  <span><i style="background:#3C3854"></i>Outros <b>16</b></span>
+                </div>
+              </div>
+            </div>
+            <div class="mk-avatars"><div class="mk-av">AR</div><div class="mk-av">JM</div><div class="mk-av">TS</div><div class="mk-av">LC</div><div class="mk-av" style="background:#1D1B2E;color:#9187B6">+138</div></div>
+          </div>
+        </figure>
+
+        <!-- 4 · PULSAR-RH — Clima & NR-1 -->
+        <figure class="Screen" style="--i:3;--sx:130px;--ry:-7deg" data-cap="Pulsar-RH · clima da equipe">
+          <div class="Screen__bar">
+            <svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2.6 L20 12 L12 21.4 L4 12 Z" stroke="#7048E8" stroke-width="1.3"/><circle cx="12" cy="10" r="2.2" fill="#EAEEF6"/><path d="M7.8 17 a4.2 3.6 0 0 1 8.4 0 Z" fill="#EAEEF6"/></svg>
+            <span class="Screen__title">Pulsar<b>-RH</b></span>
+            <span class="Screen__tag">clima da equipe</span>
+          </div>
+          <div class="Screen__body">
+            <div class="mk-kpi"><div class="lbl">Favorabilidade geral</div><div class="val">78%</div><div class="dl">▲ 6 p.p. no trimestre</div></div>
+            <div class="mk-bars">
+              <div class="mk-bar"><span>Autonomia</span><div class="track"><div class="fill" style="width:88%"></div></div><span class="pct">88%</span></div>
+              <div class="mk-bar"><span>Liderança</span><div class="track"><div class="fill" style="width:82%"></div></div><span class="pct">82%</span></div>
+              <div class="mk-bar"><span>Segurança psic.</span><div class="track"><div class="fill" style="width:79%"></div></div><span class="pct">79%</span></div>
+              <div class="mk-bar"><span>Reconhecimento</span><div class="track"><div class="fill" style="width:74%"></div></div><span class="pct">74%</span></div>
+              <div class="mk-bar"><span>Carga de trabalho</span><div class="track"><div class="fill" style="width:61%"></div></div><span class="pct">61%</span></div>
+            </div>
+            <svg viewBox="0 0 300 22" preserveAspectRatio="none" style="width:100%;height:20px;opacity:.75"><path d="M0 11 H120 l10 -9 l12 18 l12 -22 l12 22 l10 -9 H300" fill="none" stroke="#7048E8" stroke-width="1.6"/></svg>
+          </div>
+        </figure>
+
+      </div>
+      <div class="Showcase__hud" id="showcase-hud">
+        <span id="showcase-cap">Pulsar Finance · painel</span><span class="Mock__tag">dados ilustrativos</span>
+        <span class="Showcase__dots"><i class="on"></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MISSION ===================== -->
+  <section class="Sec Sec--mv" id="mission" data-sec="missão" data-subs="2" data-sound="mission">
+    <span class="Sec__label" data-reveal>missão</span>
+    <p class="MV__text">
+      <span class="MV__line"><span>Mostrar o <span class="MV__marker">pulso</span> da</span></span>
+      <span class="MV__line"><span>operação em tempo real</span></span>
+      <span class="MV__line"><span>— sem planilha.</span></span>
+    </p>
+    <p class="MV__en" data-reveal>Uma fundação única: multi-tenant, papéis com RLS, dados que conversam.</p>
+  </section>
+
+  <!-- ===================== VISION ===================== -->
+  <section class="Sec Sec--mv" id="vision" data-sec="visão" data-subs="2">
+    <span class="Sec__label" data-reveal>visão</span>
+    <p class="MV__text">
+      <span class="MV__line"><span>Ser o <span class="MV__marker">sistema nervoso</span></span></span>
+      <span class="MV__line"><span>das empresas do Nordeste.</span></span>
+    </p>
+    <p class="MV__en" data-reveal>Cada decisão sentindo o pulso certo do negócio.</p>
+  </section>
+
+  <!-- ===================== SERVICE — ribbon lateral curvado (coverflow 3D) ===================== -->
+  <section class="Sec Sec--service" id="service" data-sec="serviços" data-subs="3" data-sound="works">
+    <div class="Ribbon__sticky">
+      <span class="Sec__label" data-reveal>serviços</span>
+      <div class="Ribbon__title">SERVIÇOS</div>
+      <div class="Ribbon" id="ribbon">
+
+        <!-- 01 · Pulsar-RH -->
+        <article class="Svc" data-svc="Pulsar-RH">
+          <div class="Svc__screen">
+            <div class="Screen__bar" style="margin:-16px -16px 2px;border-radius:0"><svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2.6 L20 12 L12 21.4 L4 12 Z" stroke="#7048E8" stroke-width="1.3"/><circle cx="12" cy="10" r="2.2" fill="#EAEEF6"/><path d="M7.8 17 a4.2 3.6 0 0 1 8.4 0 Z" fill="#EAEEF6"/></svg><span class="Screen__title">Pulsar<b>-RH</b></span><span class="Screen__tag">pessoas</span></div>
+            <div class="mk-row">
+              <div class="mk-mini"><div class="lbl">Colab.</div><div class="val">142</div></div>
+              <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div></div>
+              <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div></div>
+            </div>
+            <div class="mk-chart"><div class="cttl">Headcount por setor</div>
+              <div class="mk-flex">
+                <svg class="mk-donut" viewBox="0 0 84 84" width="80" height="80">
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#3C3854" stroke-width="10"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#401C7F" stroke-width="10" stroke-dasharray="86 195" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7048E8" stroke-width="10" stroke-dasharray="52 195" stroke-dashoffset="-86" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7FB89C" stroke-width="10" stroke-dasharray="33 195" stroke-dashoffset="-138" transform="rotate(-90 42 42)"/>
+                </svg>
+                <div class="mk-legend">
+                  <span><i style="background:#401C7F"></i>Operação <b>64</b></span>
+                  <span><i style="background:#7048E8"></i>Comercial <b>38</b></span>
+                  <span><i style="background:#7FB89C"></i>Adm/Fin. <b>24</b></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="Svc__info">
+            <span class="Svc__idx">01 / SERVIÇO</span>
+            <h3 class="Svc__name">Pulsar<b>-RH</b></h3>
+            <p class="Svc__tagline">Gestão de pessoas viva — o pulso da equipe sempre à vista.</p>
+            <ul class="Svc__ul">
+              <li>Rotinas de pessoas leves, sem papelada</li>
+              <li>Desenvolvimento visível para cada colaborador</li>
+              <li>Clima da equipe acompanhado de perto</li>
+            </ul>
+            <div class="Svc__chips"><span class="Svc__chip">pessoas</span><span class="Svc__chip">clareza</span><span class="Svc__chip">leveza</span></div>
+          </div>
+        </article>
+
+        <!-- 02 · Pulsar Finance -->
+        <article class="Svc" data-svc="Pulsar Finance">
+          <div class="Svc__screen">
+            <div class="Screen__bar" style="margin:-16px -16px 2px;border-radius:0"><svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#7048E8" stroke-width="1.3"/><path d="M6 12 H9.5 L11 8.5 L13.5 15.5 L15 12 H18" stroke="#EAEEF6" stroke-width="1.2"/></svg><span class="Screen__title">Pulsar <b>Finance</b></span><span class="Screen__tag">painel</span></div>
+            <div class="mk-kpi"><div class="lbl">Faturamento · Julho</div><div class="val">R$ 1.248.320</div><div class="dl">▲ 12,4% vs. junho</div></div>
+            <div class="mk-row">
+              <div class="mk-mini"><div class="lbl">Margem líq.</div><div class="val good">32,4%</div></div>
+              <div class="mk-mini"><div class="lbl">Despesas</div><div class="val">R$ 421k</div></div>
+              <div class="mk-mini"><div class="lbl">Saldo</div><div class="val">R$ 318k</div></div>
+            </div>
+            <div class="mk-chart"><div class="cttl">Fluxo de caixa · 8 semanas</div>
+              <svg viewBox="0 0 300 60" preserveAspectRatio="none">
+                <polyline points="0,50 43,43 86,47 129,32 172,36 215,20 258,25 300,10 300,60 0,60" fill="#7048E81f" stroke="none"/>
+                <polyline points="0,50 43,43 86,47 129,32 172,36 215,20 258,25 300,10" fill="none" stroke="#7048E8" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="Svc__info">
+            <span class="Svc__idx">02 / SERVIÇO</span>
+            <h3 class="Svc__name">Pulsar <b>Finance</b></h3>
+            <p class="Svc__tagline">O financeiro em tempo real — não o retrato do mês passado.</p>
+            <ul class="Svc__ul">
+              <li>Resultado do mês claro, sem correria</li>
+              <li>Caixa previsível — zero surpresa no fim do mês</li>
+              <li>Fechamento leve e no prazo, todo mês</li>
+            </ul>
+            <div class="Svc__chips"><span class="Svc__chip">clareza</span><span class="Svc__chip">previsibilidade</span><span class="Svc__chip">confiança</span></div>
+          </div>
+        </article>
+
+      </div>
+      <div class="Ribbon__hud" id="ribbon-hud">
+        <span id="ribbon-cap">Pulsar-RH</span><span class="Mock__tag">dados ilustrativos</span>
+        <span class="Ribbon__dots"><i class="on"></i><i></i></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SOB MEDIDA (Custom) ===================== -->
+  <section class="Sec Sec--custom" id="custom" data-sec="sob medida" data-subs="1">
+    <span class="Sec__label" data-reveal>sob medida</span>
+    <div class="CustomCard Svc--custom" data-reveal>
+      <div class="Cst">
+        <div class="Cst__head">
+          <span class="Svc__idx">SOB MEDIDA</span>
+          <h3 class="Cst__name">Custom<span>®</span></h3>
+          <p class="Cst__tagline">A plataforma é <b>sua</b> — construída no seu objetivo, com a sua marca. Sem molde, sem limite de modelo.</p>
+        </div>
+        <div class="Cst__benefits">
+          <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9 H21"/><circle cx="6.2" cy="6.7" r=".7" fill="currentColor" stroke="none"/><path d="M8 14 H16 M8 16.5 H13"/></svg><h4>Identidade própria · white-label</h4><p>Sua marca, sua cara. O produto leva o nome da sua empresa — não o nosso.</p></div>
+          <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8 H20 M4 16 H20"/><circle cx="9" cy="8" r="2.4" fill="#F5F3FA"/><circle cx="15" cy="16" r="2.4" fill="#F5F3FA"/></svg><h4>Características customizáveis</h4><p>Módulos, telas e regras moldados ao seu processo — não o contrário.</p></div>
+          <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6.5" r="2.3"/><circle cx="18" cy="6.5" r="2.3"/><circle cx="12" cy="17.5" r="2.3"/><path d="M7.6 8 L11 15.6 M16.4 8 L13 15.6 M8.3 6.5 H15.7"/></svg><h4>Integrações escolhidas</h4><p>Conecta com o que você já usa. Você decide o quê entra e o quê fica de fora.</p></div>
+          <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><h4>Objetivo próprio</h4><p>Cada decisão do produto serve à sua meta — construído de trás pra frente a partir dela.</p></div>
+        </div>
+        <div class="Cst__foot">
+          <a class="Cst__cta" href="#contact">Entrar em contato <span>&rarr;</span></a>
+          <p class="Cst__note">Projeto sob medida se acerta no contato — cada escopo é único.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MANIFESTO + CONTATO ===================== -->
+  <section class="Sec Sec--outro" id="contact" data-sec="contato" data-subs="1">
+    <span class="Sec__label" data-reveal>manifesto</span>
+    <canvas class="Outro__canvas" id="outro-canvas" aria-hidden="true"></canvas>
+    <p class="Outro__mfx" data-reveal>Todo negócio tem um pulso. A <b>AG Consultoria</b> passou anos sentindo o pulso de dezenas de empresas — e construiu o Pulsar para você sentir o seu. <span>Clareza para decidir. Leveza para operar. Confiança para crescer.</span></p>
+    <div class="Outro__ctas" data-reveal style="--i:1">
+      <a class="Outro__cta Outro__cta--primary" href="https://agconsultorialtda.com/" target="_blank" rel="noopener">Falar com a AG &rarr;</a>
+    </div>
+    <span class="Outro__firm" data-reveal style="--i:2">PULSAR · por AG CONSULTORIA</span>
+  </section>
+
+</main>
+
+<footer class="Footer">
+  <div class="Footer__col">
+    <span class="Footer__head">Navegação</span>
+    <a href="#top">Início</a><a href="#works">Produtos</a><a href="#showcase">Por dentro</a>
+    <a href="#mission">Missão</a><a href="#vision">Visão</a><a href="#service">Serviços</a>
+    <a href="#custom">Sob medida</a><a href="#contact">Contato</a>
+  </div>
+  <div class="Footer__col">
+    <span class="Footer__head">Social</span>
+    <a href="#" rel="noopener">Instagram</a><a href="#" rel="noopener">LinkedIn</a><a href="#" rel="noopener">WhatsApp</a>
+  </div>
+  <div class="Footer__col">
+    <span class="Footer__head">Contato</span>
+    <a href="https://agconsultorialtda.com/" target="_blank" rel="noopener">agconsultorialtda.com</a><a href="#">Demonstração</a>
+  </div>
+  <div class="Footer__brand">
+    <span class="Footer__logo" data-scramble>PULSAR</span>
+    <span class="Footer__copy">©2026 AG · Pulsar — Sinta o pulso da sua operação</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
