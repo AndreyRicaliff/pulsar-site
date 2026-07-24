@@ -47,7 +47,7 @@
   <nav class="SideMenu__menu" aria-label="menu principal">
     <div>
       <div class="SideMenu__item" style="--i:0"><a href="#top"><i>01</i>Início</a></div>
-      <div class="SideMenu__item" style="--i:1"><a href="#works"><i>02</i>Produtos</a></div>
+      <div class="SideMenu__item" style="--i:1"><a href="#works"><i>02</i>Diferenciais</a></div>
       <div class="SideMenu__item" style="--i:2"><a href="#mission"><i>03</i>Missão</a></div>
       <div class="SideMenu__item" style="--i:3"><a href="#service"><i>04</i>Serviços</a></div>
       <div class="SideMenu__item" style="--i:4"><a href="#custom"><i>05</i>Sob medida</a></div>
@@ -76,30 +76,12 @@
   </section>
 
   <!-- ===================== WORKS ===================== -->
-  <section class="Sec Sec--works" id="works" data-sec="produtos" data-subs="5" data-sound="works">
-    <span class="Sec__label" data-reveal>produtos</span>
-    <h2 class="SecTitle" data-distort>PRODUTOS</h2>
+  <section class="Sec Sec--works" id="works" data-sec="diferenciais" data-subs="3" data-sound="works">
+    <span class="Sec__label" data-reveal>diferenciais</span>
+    <h2 class="SecTitle" data-distort>DIFERENCIAIS</h2>
     <ol class="Works__list" id="works-list">
-      <li class="Works__item" data-reveal style="--i:0" data-thumb="finance">
-        <span class="Works__date"><b>01</b><span>finance</span></span>
-        <a class="Works__title" href="#" data-split>PULSAR FINANCE</a>
-        <span class="Works__impression">o caixa pulsando</span>
-        <span class="Works__sub">O financeiro da sua empresa vivo — clareza para decidir todo dia</span>
-        <span class="Works__tags">
-          <i class="Works__tag">clareza</i><i class="Works__tag">tempo real</i><i class="Works__tag">decisão</i>
-        </span>
-      </li>
-      <li class="Works__item" data-reveal style="--i:1" data-thumb="rh">
-        <span class="Works__date"><b>02</b><span>rh</span></span>
-        <a class="Works__title" href="#" data-split>PULSAR-RH</a>
-        <span class="Works__impression">o pulso da equipe</span>
-        <span class="Works__sub">Pessoas engajadas e gestão leve — o pulso da equipe sempre à vista</span>
-        <span class="Works__tags">
-          <i class="Works__tag">pessoas</i><i class="Works__tag">engajamento</i><i class="Works__tag">leveza</i>
-        </span>
-      </li>
-      <li class="Works__item" data-reveal style="--i:2" data-thumb="lider">
-        <span class="Works__date"><b>03</b><span>tempo real</span></span>
+      <li class="Works__item" data-reveal style="--i:0" data-thumb="lider">
+        <span class="Works__date"><b>01</b><span>tempo real</span></span>
         <a class="Works__title" href="#" data-split>FLUXO EM TEMPO REAL</a>
         <span class="Works__impression">na hora, não no fim do mês</span>
         <span class="Works__sub">O que acontece no negócio aparece na hora — sem esperar o fim do mês</span>
@@ -107,8 +89,8 @@
           <i class="Works__tag">na hora</i><i class="Works__tag">sem espera</i><i class="Works__tag">confiança</i>
         </span>
       </li>
-      <li class="Works__item" data-reveal style="--i:3" data-thumb="beto">
-        <span class="Works__date"><b>04</b><span>integração</span></span>
+      <li class="Works__item" data-reveal style="--i:1" data-thumb="beto">
+        <span class="Works__date"><b>02</b><span>integração</span></span>
         <a class="Works__title" href="#" data-split>TUDO CONECTADO</a>
         <span class="Works__impression">no mesmo pulso</span>
         <span class="Works__sub">Suas fontes de dados unidas num só lugar — sem retrabalho</span>
@@ -116,8 +98,8 @@
           <i class="Works__tag">unificado</i><i class="Works__tag">automático</i><i class="Works__tag">seguro</i>
         </span>
       </li>
-      <li class="Works__item" data-reveal style="--i:4" data-thumb="hub">
-        <span class="Works__date"><b>05</b><span>painéis</span></span>
+      <li class="Works__item" data-reveal style="--i:2" data-thumb="hub">
+        <span class="Works__date"><b>03</b><span>painéis</span></span>
         <a class="Works__title" href="#" data-split>PAINÉIS VIVOS</a>
         <span class="Works__impression">KPIs que respiram</span>
         <span class="Works__sub">O número que importa, sempre atual — do resumo ao detalhe</span>
@@ -126,7 +108,7 @@
         </span>
       </li>
     </ol>
-    <a class="Works__more" href="#" data-reveal data-scramble>Toda a plataforma</a>
+    <a class="Works__more" href="#service" data-reveal data-scramble>Conhecer os serviços</a>
     <figure class="Works__thumb" id="works-thumb">
       <canvas id="thumb-canvas" aria-hidden="true"></canvas>
       <figcaption id="thumb-caption">—</figcaption>
@@ -147,17 +129,25 @@
             <span class="Screen__tag">painel</span>
           </div>
           <div class="Screen__body">
-            <div class="mk-kpi"><div class="lbl">Faturamento · Julho</div><div class="val">R$ 1.248.320</div><div class="dl">▲ 12,4% vs. junho</div></div>
+            <div class="mk-top"><div class="mk-tabs"><span class="mk-tab on">Visão</span><span class="mk-tab">Resultado</span><span class="mk-tab">Caixa</span><span class="mk-tab">Contas</span></div><span class="mk-live"><i></i>ao vivo</span></div>
+            <div class="mk-kpi"><div class="lbl">Faturamento · Julho</div>
+              <div class="mk-flex" style="align-items:flex-end;justify-content:space-between"><div class="val">R$ 1.248.320</div>
+              <svg width="96" height="30" viewBox="0 0 96 30" aria-hidden="true"><defs><linearGradient id="mkgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7048E8" stop-opacity=".4"/><stop offset="1" stop-color="#7048E8" stop-opacity="0"/></linearGradient></defs><polyline points="0,24 14,20 28,22 42,15 56,17 70,9 84,12 96,5 96,30 0,30" fill="url(#mkgA)"/><polyline points="0,24 14,20 28,22 42,15 56,17 70,9 84,12 96,5" fill="none" stroke="#A78BFA" stroke-width="1.6"/></svg></div>
+              <div class="dl">▲ 12,4% vs. junho · 92% da meta</div></div>
             <div class="mk-row">
-              <div class="mk-mini"><div class="lbl">Margem líq.</div><div class="val good">32,4%</div></div>
-              <div class="mk-mini"><div class="lbl">Despesas</div><div class="val">R$ 421k</div></div>
-              <div class="mk-mini"><div class="lbl">Saldo</div><div class="val">R$ 318k</div></div>
+              <div class="mk-mini"><div class="lbl">Margem líq.</div><div class="val good">32,4%</div><div class="mk-delta">▲ 1,8 p.p.</div></div>
+              <div class="mk-mini"><div class="lbl">Despesas</div><div class="val">R$ 421k</div><div class="mk-delta neg">▲ 3,1%</div></div>
+              <div class="mk-mini"><div class="lbl">Saldo projetado</div><div class="val">R$ 318k</div><div class="mk-delta">▲ 9,4%</div></div>
             </div>
             <div class="mk-chart"><div class="cttl">Fluxo de caixa · 8 semanas</div>
-              <svg viewBox="0 0 300 70" preserveAspectRatio="none">
-                <polyline points="0,58 43,50 86,55 129,38 172,43 215,24 258,30 300,12 300,70 0,70" fill="#7048E81f" stroke="none"/>
-                <polyline points="0,58 43,50 86,55 129,38 172,43 215,24 258,30 300,12" fill="none" stroke="#7048E8" stroke-width="2"/>
+              <svg viewBox="0 0 300 64" preserveAspectRatio="none">
+                <defs><linearGradient id="mkgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7048E8" stop-opacity=".32"/><stop offset="1" stop-color="#7048E8" stop-opacity="0"/></linearGradient></defs>
+                <polyline points="0,52 43,45 86,49 129,34 172,38 215,21 258,27 300,10 300,64 0,64" fill="url(#mkgB)" stroke="none"/>
+                <polyline points="0,52 43,45 86,49 129,34 172,38 215,21 258,27 300,10" fill="none" stroke="#7048E8" stroke-width="2"/>
+                <polyline points="0,57 43,55 86,58 129,50 172,53 215,45 258,48 300,40" fill="none" stroke="#7FB89C" stroke-width="1.3" stroke-dasharray="3 3"/>
+                <g fill="#A78BFA"><circle cx="215" cy="21" r="2.6"/><circle cx="300" cy="10" r="2.6"/></g>
               </svg>
+              <div class="mk-legend2"><span><i style="background:#7048E8"></i>entradas</span><span><i style="background:#7FB89C"></i>saídas</span></div>
             </div>
           </div>
         </figure>
@@ -170,15 +160,21 @@
             <span class="Screen__tag">DRE · competência</span>
           </div>
           <div class="Screen__body">
+            <div class="mk-top"><span class="mk-live"><i></i>competência fechada</span><span class="mk-badge ac">julho · consolidado</span></div>
             <table class="mk-table">
-              <tr><td>Receita bruta</td><td>1.612.900</td></tr>
-              <tr class="neg"><td>(–) Deduções</td><td>364.580</td></tr>
-              <tr><td>Receita líquida</td><td>1.248.320</td></tr>
-              <tr class="neg"><td>(–) CMV</td><td>402.110</td></tr>
-              <tr><td>Lucro bruto</td><td>846.210</td></tr>
-              <tr class="neg"><td>(–) Despesas op.</td><td>421.400</td></tr>
+              <tr><td>Receita bruta<div class="tbar"><i style="width:100%"></i></div></td><td>1.612.900</td></tr>
+              <tr class="neg"><td>(–) Deduções<div class="tbar"><i style="width:23%"></i></div></td><td>364.580</td></tr>
+              <tr><td>Receita líquida<div class="tbar"><i style="width:77%"></i></div></td><td>1.248.320</td></tr>
+              <tr class="neg"><td>(–) CMV<div class="tbar"><i style="width:25%"></i></div></td><td>402.110</td></tr>
+              <tr><td>Lucro bruto<div class="tbar"><i style="width:52%"></i></div></td><td>846.210</td></tr>
+              <tr class="neg"><td>(–) Despesas op.<div class="tbar"><i style="width:26%"></i></div></td><td>421.400</td></tr>
               <tr class="tot"><td>EBITDA · margem 34,0%</td><td>424.810</td></tr>
             </table>
+            <div class="mk-row">
+              <div class="mk-mini"><div class="lbl">Margem bruta</div><div class="val good">52,5%</div></div>
+              <div class="mk-mini"><div class="lbl">Margem EBITDA</div><div class="val good">34,0%</div></div>
+              <div class="mk-mini"><div class="lbl">Conversão em caixa</div><div class="val">87%</div></div>
+            </div>
           </div>
         </figure>
 
@@ -190,28 +186,34 @@
             <span class="Screen__tag">pessoas</span>
           </div>
           <div class="Screen__body">
+            <div class="mk-top"><div class="mk-tabs"><span class="mk-tab on">Pessoas</span><span class="mk-tab">Ponto</span><span class="mk-tab">Férias</span><span class="mk-tab">Desenvolvimento</span></div><span class="mk-live"><i></i>ao vivo</span></div>
             <div class="mk-row">
-              <div class="mk-mini"><div class="lbl">Colaboradores</div><div class="val">142</div></div>
-              <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div></div>
-              <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div></div>
+              <div class="mk-mini"><div class="lbl">Colaboradores</div><div class="val">142</div><div class="mk-delta">▲ 4 no mês</div></div>
+              <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div><div class="mk-delta">▼ 0,6 p.p.</div></div>
+              <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div><div class="mk-delta">▲ 0,3</div></div>
             </div>
             <div class="mk-chart"><div class="cttl">Headcount por setor</div>
               <div class="mk-flex">
-                <svg class="mk-donut" viewBox="0 0 84 84" width="84" height="84">
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#3C3854" stroke-width="10"/>
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#401C7F" stroke-width="10" stroke-dasharray="86 195" transform="rotate(-90 42 42)"/>
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7048E8" stroke-width="10" stroke-dasharray="52 195" stroke-dashoffset="-86" transform="rotate(-90 42 42)"/>
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7FB89C" stroke-width="10" stroke-dasharray="33 195" stroke-dashoffset="-138" transform="rotate(-90 42 42)"/>
+                <svg class="mk-donut" viewBox="0 0 84 84" width="80" height="80">
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#3C3854" stroke-width="9"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#401C7F" stroke-width="9" stroke-dasharray="86 195" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7048E8" stroke-width="9" stroke-dasharray="52 195" stroke-dashoffset="-86" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7FB89C" stroke-width="9" stroke-dasharray="33 195" stroke-dashoffset="-138" transform="rotate(-90 42 42)"/>
+                  <text x="42" y="40" text-anchor="middle" fill="#EAEEF6" font-size="15" font-weight="800">142</text>
+                  <text x="42" y="52" text-anchor="middle" fill="#9187B6" font-size="7">pessoas</text>
                 </svg>
                 <div class="mk-legend">
                   <span><i style="background:#401C7F"></i>Operação <b>64</b></span>
                   <span><i style="background:#7048E8"></i>Comercial <b>38</b></span>
-                  <span><i style="background:#7FB89C"></i>Adm/Financeiro <b>24</b></span>
+                  <span><i style="background:#7FB89C"></i>Adm/Fin. <b>24</b></span>
                   <span><i style="background:#3C3854"></i>Outros <b>16</b></span>
                 </div>
               </div>
             </div>
-            <div class="mk-avatars"><div class="mk-av">AR</div><div class="mk-av">JM</div><div class="mk-av">TS</div><div class="mk-av">LC</div><div class="mk-av" style="background:#1D1B2E;color:#9187B6">+138</div></div>
+            <div>
+              <div class="mk-move"><div class="mk-av">MC</div><span><b>Maria C.</b> · Comercial</span><span class="mk-badge ok">admissão</span></div>
+              <div class="mk-move"><div class="mk-av">RS</div><span><b>Rafael S.</b> · Operação</span><span class="mk-badge ac">férias · 14d</span></div>
+            </div>
           </div>
         </figure>
 
@@ -223,15 +225,22 @@
             <span class="Screen__tag">clima da equipe</span>
           </div>
           <div class="Screen__body">
-            <div class="mk-kpi"><div class="lbl">Favorabilidade geral</div><div class="val">78%</div><div class="dl">▲ 6 p.p. no trimestre</div></div>
+            <div class="mk-top"><span class="mk-live"><i></i>coleta ativa · 96 respostas</span><span class="mk-badge ac">anônimo</span></div>
+            <div class="mk-flex" style="justify-content:center">
+              <svg viewBox="0 0 160 92" width="170" aria-hidden="true">
+                <defs><linearGradient id="mkgC" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#401C7F"/><stop offset="1" stop-color="#A55EFF"/></linearGradient></defs>
+                <path d="M14 84 A66 66 0 0 1 146 84" fill="none" stroke="#3C3854" stroke-width="11" stroke-linecap="round"/>
+                <path d="M14 84 A66 66 0 0 1 146 84" pathLength="100" stroke-dasharray="78 22.5" fill="none" stroke="url(#mkgC)" stroke-width="11" stroke-linecap="round"/>
+                <text x="80" y="66" text-anchor="middle" fill="#EAEEF6" font-size="26" font-weight="800">78%</text>
+                <text x="80" y="82" text-anchor="middle" fill="#9187B6" font-size="8.5">favorabilidade · ▲ 6 p.p.</text>
+              </svg>
+            </div>
             <div class="mk-bars">
               <div class="mk-bar"><span>Autonomia</span><div class="track"><div class="fill" style="width:88%"></div></div><span class="pct">88%</span></div>
               <div class="mk-bar"><span>Liderança</span><div class="track"><div class="fill" style="width:82%"></div></div><span class="pct">82%</span></div>
-              <div class="mk-bar"><span>Segurança psic.</span><div class="track"><div class="fill" style="width:79%"></div></div><span class="pct">79%</span></div>
               <div class="mk-bar"><span>Reconhecimento</span><div class="track"><div class="fill" style="width:74%"></div></div><span class="pct">74%</span></div>
               <div class="mk-bar"><span>Carga de trabalho</span><div class="track"><div class="fill" style="width:61%"></div></div><span class="pct">61%</span></div>
             </div>
-            <svg viewBox="0 0 300 22" preserveAspectRatio="none" style="width:100%;height:20px;opacity:.75"><path d="M0 11 H120 l10 -9 l12 18 l12 -22 l12 22 l10 -9 H300" fill="none" stroke="#7048E8" stroke-width="1.6"/></svg>
           </div>
         </figure>
 
@@ -247,11 +256,10 @@
   <section class="Sec Sec--mv" id="mission" data-sec="missão" data-subs="2" data-sound="mission">
     <span class="Sec__label" data-reveal>missão</span>
     <p class="MV__text">
-      <span class="MV__line"><span>Mostrar o <span class="MV__marker">pulso</span> da</span></span>
-      <span class="MV__line"><span>operação em tempo real</span></span>
-      <span class="MV__line"><span>— sem planilha.</span></span>
+      <span class="MV__line"><span>O <span class="MV__marker">pulso</span> da sua operação,</span></span>
+      <span class="MV__line"><span>na <span class="MV__marker">palma da mão</span>.</span></span>
     </p>
-    <p class="MV__en" data-reveal>Uma fundação única: multi-tenant, papéis com RLS, dados que conversam.</p>
+    <p class="MV__en" data-reveal>Abriu, viu, decidiu — em segundos, de qualquer tela.</p>
   </section>
 
   <!-- ===================== VISION ===================== -->
@@ -275,18 +283,21 @@
         <article class="Svc" data-svc="Pulsar-RH">
           <div class="Svc__screen">
             <div class="Screen__bar" style="margin:-16px -16px 2px;border-radius:0"><svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2.6 L20 12 L12 21.4 L4 12 Z" stroke="#7048E8" stroke-width="1.3"/><circle cx="12" cy="10" r="2.2" fill="#EAEEF6"/><path d="M7.8 17 a4.2 3.6 0 0 1 8.4 0 Z" fill="#EAEEF6"/></svg><span class="Screen__title">Pulsar<b>-RH</b></span><span class="Screen__tag">pessoas</span></div>
+            <div class="mk-top"><span class="mk-live"><i></i>ao vivo</span><span class="mk-badge ac">portal da equipe</span></div>
             <div class="mk-row">
-              <div class="mk-mini"><div class="lbl">Colab.</div><div class="val">142</div></div>
-              <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div></div>
-              <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div></div>
+              <div class="mk-mini"><div class="lbl">Colab.</div><div class="val">142</div><div class="mk-delta">▲ 4</div></div>
+              <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div><div class="mk-delta">▼ 0,6</div></div>
+              <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div><div class="mk-delta">▲ 0,3</div></div>
             </div>
             <div class="mk-chart"><div class="cttl">Headcount por setor</div>
               <div class="mk-flex">
-                <svg class="mk-donut" viewBox="0 0 84 84" width="80" height="80">
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#3C3854" stroke-width="10"/>
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#401C7F" stroke-width="10" stroke-dasharray="86 195" transform="rotate(-90 42 42)"/>
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7048E8" stroke-width="10" stroke-dasharray="52 195" stroke-dashoffset="-86" transform="rotate(-90 42 42)"/>
-                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7FB89C" stroke-width="10" stroke-dasharray="33 195" stroke-dashoffset="-138" transform="rotate(-90 42 42)"/>
+                <svg class="mk-donut" viewBox="0 0 84 84" width="76" height="76">
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#3C3854" stroke-width="9"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#401C7F" stroke-width="9" stroke-dasharray="86 195" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7048E8" stroke-width="9" stroke-dasharray="52 195" stroke-dashoffset="-86" transform="rotate(-90 42 42)"/>
+                  <circle cx="42" cy="42" r="31" fill="none" stroke="#7FB89C" stroke-width="9" stroke-dasharray="33 195" stroke-dashoffset="-138" transform="rotate(-90 42 42)"/>
+                  <text x="42" y="40" text-anchor="middle" fill="#EAEEF6" font-size="15" font-weight="800">142</text>
+                  <text x="42" y="52" text-anchor="middle" fill="#9187B6" font-size="7">pessoas</text>
                 </svg>
                 <div class="mk-legend">
                   <span><i style="background:#401C7F"></i>Operação <b>64</b></span>
@@ -313,17 +324,21 @@
         <article class="Svc" data-svc="Pulsar Finance">
           <div class="Svc__screen">
             <div class="Screen__bar" style="margin:-16px -16px 2px;border-radius:0"><svg class="Screen__mark" viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#7048E8" stroke-width="1.3"/><path d="M6 12 H9.5 L11 8.5 L13.5 15.5 L15 12 H18" stroke="#EAEEF6" stroke-width="1.2"/></svg><span class="Screen__title">Pulsar <b>Finance</b></span><span class="Screen__tag">painel</span></div>
-            <div class="mk-kpi"><div class="lbl">Faturamento · Julho</div><div class="val">R$ 1.248.320</div><div class="dl">▲ 12,4% vs. junho</div></div>
+            <div class="mk-top"><span class="mk-live"><i></i>ao vivo</span><span class="mk-badge ac">painel do dono</span></div>
+            <div class="mk-kpi"><div class="lbl">Faturamento · Julho</div><div class="val">R$ 1.248.320</div><div class="dl">▲ 12,4% vs. junho · 92% da meta</div></div>
             <div class="mk-row">
-              <div class="mk-mini"><div class="lbl">Margem líq.</div><div class="val good">32,4%</div></div>
-              <div class="mk-mini"><div class="lbl">Despesas</div><div class="val">R$ 421k</div></div>
-              <div class="mk-mini"><div class="lbl">Saldo</div><div class="val">R$ 318k</div></div>
+              <div class="mk-mini"><div class="lbl">Margem líq.</div><div class="val good">32,4%</div><div class="mk-delta">▲ 1,8 p.p.</div></div>
+              <div class="mk-mini"><div class="lbl">Despesas</div><div class="val">R$ 421k</div><div class="mk-delta neg">▲ 3,1%</div></div>
+              <div class="mk-mini"><div class="lbl">Saldo</div><div class="val">R$ 318k</div><div class="mk-delta">▲ 9,4%</div></div>
             </div>
             <div class="mk-chart"><div class="cttl">Fluxo de caixa · 8 semanas</div>
-              <svg viewBox="0 0 300 60" preserveAspectRatio="none">
-                <polyline points="0,50 43,43 86,47 129,32 172,36 215,20 258,25 300,10 300,60 0,60" fill="#7048E81f" stroke="none"/>
-                <polyline points="0,50 43,43 86,47 129,32 172,36 215,20 258,25 300,10" fill="none" stroke="#7048E8" stroke-width="2"/>
+              <svg viewBox="0 0 300 56" preserveAspectRatio="none">
+                <defs><linearGradient id="mkgD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7048E8" stop-opacity=".32"/><stop offset="1" stop-color="#7048E8" stop-opacity="0"/></linearGradient></defs>
+                <polyline points="0,46 43,40 86,44 129,30 172,34 215,19 258,23 300,9 300,56 0,56" fill="url(#mkgD)" stroke="none"/>
+                <polyline points="0,46 43,40 86,44 129,30 172,34 215,19 258,23 300,9" fill="none" stroke="#7048E8" stroke-width="2"/>
+                <g fill="#A78BFA"><circle cx="215" cy="19" r="2.4"/><circle cx="300" cy="9" r="2.4"/></g>
               </svg>
+              <div class="mk-legend2"><span><i style="background:#7048E8"></i>entradas</span><span><i style="background:#7FB89C"></i>projeção</span></div>
             </div>
           </div>
           <div class="Svc__info">
@@ -350,7 +365,9 @@
   <!-- ===================== SOB MEDIDA (Custom) ===================== -->
   <section class="Sec Sec--custom" id="custom" data-sec="sob medida" data-subs="1">
     <span class="Sec__label" data-reveal>sob medida</span>
-    <div class="CustomCard Svc--custom" data-reveal>
+    <h2 class="SecTitle SecTitle--custom" data-distort data-reveal>SOB MEDIDA</h2>
+    <p class="Custom__tag" data-reveal style="--i:1">Nenhum dos dois te serve inteiro? A gente constrói o seu.</p>
+    <div class="CustomCard Svc--custom" data-reveal style="--i:2">
       <div class="Cst">
         <div class="Cst__head">
           <span class="Svc__idx">SOB MEDIDA</span>
@@ -387,7 +404,7 @@
 <footer class="Footer">
   <div class="Footer__col">
     <span class="Footer__head">Navegação</span>
-    <a href="#top">Início</a><a href="#works">Produtos</a><a href="#showcase">Por dentro</a>
+    <a href="#top">Início</a><a href="#works">Diferenciais</a><a href="#showcase">Por dentro</a>
     <a href="#mission">Missão</a><a href="#vision">Visão</a><a href="#service">Serviços</a>
     <a href="#custom">Sob medida</a><a href="#contact">Contato</a>
   </div>
