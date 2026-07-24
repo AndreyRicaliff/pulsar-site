@@ -635,6 +635,38 @@ const Ribbon = (() => {
   };
 })();
 
+/* ---------- MOCK DEMO: cards de serviço interativos (abas, tema white-label, período) ---------- */
+(function MockDemo(){
+  const ribbon=$('#ribbon'); if(!ribbon) return;
+  ribbon.addEventListener('click', e=>{
+    const tab=e.target.closest('.mk-tab[data-mktab]');
+    if(tab){
+      const scr=tab.closest('.Svc__screen');
+      scr.querySelectorAll('.mk-tab[data-mktab]').forEach(t=>t.classList.toggle('on',t===tab));
+      scr.querySelectorAll('.mk-body').forEach(b=>b.classList.toggle('on',b.dataset.body===tab.dataset.mktab));
+      Som.select(); return;
+    }
+    const dot=e.target.closest('.mk-dot');
+    if(dot){
+      const scr=dot.closest('.Svc__screen');
+      scr.dataset.mktheme=dot.dataset.theme;
+      scr.querySelectorAll('.mk-dot').forEach(d=>d.classList.toggle('on',d===dot));
+      Som.select(); return;
+    }
+    const per=e.target.closest('.mk-per[data-per]');
+    if(per){
+      const body=per.closest('.mk-body');
+      body.querySelectorAll('.mk-per').forEach(x=>x.classList.toggle('on',x===per));
+      body.querySelectorAll('[data-jul]').forEach(el=>{
+        el.classList.remove('mk-swap'); void el.offsetWidth;
+        el.textContent=el.dataset[per.dataset.per];
+        el.classList.add('mk-swap');
+      });
+      Som.select();
+    }
+  });
+})();
+
 /* ---------- BOOT + LOOP ÚNICO ---------- */
 (function boot(){
   const loading=$('#loading');
