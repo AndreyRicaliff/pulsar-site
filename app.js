@@ -123,7 +123,7 @@ const Scroll = (() => {
   const max = ()=>document.documentElement.scrollHeight-innerHeight;
   if(smooth){
     addEventListener('wheel',e=>{
-      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open'||document.body.dataset.demo==='open') return;
+      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open') return;
       e.preventDefault();
       target=clamp(target+e.deltaY,0,max());
     },{passive:false});
@@ -569,6 +569,8 @@ const Showcase = (() => {
   const cap=$('#showcase-cap');
   const N=screens.length, GAP=780;                 // = o -780px do --i no CSS
   const titles=screens.map(s=>s.dataset.cap||'');
+  const phrases=screens.map(s=>s.dataset.phrase||'');
+  const ph=$('#showcase-phrase'); let lastF=-1;
   let visible=false;
   new IntersectionObserver(es=>es.forEach(e=>visible=e.isIntersecting),{threshold:0}).observe(sec);
   function apply(p){
@@ -587,6 +589,11 @@ const Showcase = (() => {
     });
     dots.forEach((d,i)=>d.classList.toggle('on',i===focus));
     if(cap) cap.textContent=titles[focus];
+    if(ph && focus!==lastF){ lastF=focus;                  // a frase-diferencial acompanha o foco
+      ph.textContent=phrases[focus];
+      ph.classList.toggle('is-grad', focus%2===1);         // alterna branco/roxo
+      ph.classList.remove('is-in'); void ph.offsetWidth; ph.classList.add('is-in');
+    }
   }
   return { apply, update(){
     if(!visible) return;
@@ -635,73 +642,17 @@ const Ribbon = (() => {
   };
 })();
 
-/* ---------- DEMO: dashboard de demonstração interativo (tela cheia) ---------- */
-(function DemoDash(){
-  const root=$('#demo'); if(!root) return;
-  const win=$('#demo-win');
-  function setProd(p){
-    root.dataset.prod=p;
-    root.querySelectorAll('[data-prod-btn]').forEach(b=>b.classList.toggle('on',b.dataset.prodBtn===p));
-    root.querySelectorAll('[data-prod-pane]').forEach(pn=>pn.hidden=pn.dataset.prodPane!==p);
-    fecharDrills();
-  }
-  function fecharDrills(){ root.querySelectorAll('.dm-drill').forEach(d=>d.classList.remove('on')); }
-  document.addEventListener('click', e=>{
-    const open=e.target.closest('button[data-demo-open]');
-    if(open){
-      document.body.dataset.modal='';                       // se veio do Saiba mais, fecha
-      if(open.dataset.demoOpen) setProd(open.dataset.demoOpen);
-      document.body.dataset.demo='open'; Som.select(); return;
-    }
-    if(!root.contains(e.target)) return;
-    if(e.target.closest('.Demo__x')||e.target.id==='demo-backdrop'){ document.body.dataset.demo=''; Som.select(); return; }
-    const pb=e.target.closest('.dm-prod-btn');
-    if(pb){ setProd(pb.dataset.prodBtn); Som.select(); return; }
-    const tab=e.target.closest('.dm-tab');
-    if(tab){
-      const pane=tab.closest('.dm-prod');
-      pane.querySelectorAll('.dm-tab').forEach(t=>t.classList.toggle('on',t===tab));
-      pane.querySelectorAll('.dm-pane').forEach(b=>b.classList.toggle('on',b.dataset.pane===tab.dataset.dmtab));
-      fecharDrills(); Som.select(); return;
-    }
-    const dot=e.target.closest('.mk-dot');
-    if(dot && dot.closest('.Demo__bar')){
-      win.dataset.mktheme=dot.dataset.theme;
-      root.querySelectorAll('.Demo__bar .mk-dot').forEach(d=>d.classList.toggle('on',d===dot));
-      Som.select(); return;
-    }
-    const per=e.target.closest('.mk-per[data-per]');   // ANTES do drill: o período mora dentro do KPI clicável
-    if(!per){
-      const drill=e.target.closest('[data-drill]');
-      if(drill){
-        const alvo=root.querySelector('.dm-drill[data-drill-panel="'+drill.dataset.drill+'"]');
-        if(alvo){ fecharDrills(); alvo.classList.add('on'); Som.select(); } return;
-      }
-      if(e.target.closest('.dm-back')){ fecharDrills(); Som.select(); return; }
-    }
-    if(per){
-      const pane=per.closest('.dm-pane');
-      pane.querySelectorAll('.mk-per').forEach(x=>x.classList.toggle('on',x===per));
-      pane.querySelectorAll('[data-jul]').forEach(el=>{
-        el.classList.remove('mk-swap'); void el.offsetWidth;
-        el.textContent=el.dataset[per.dataset.per]; el.classList.add('mk-swap');
-      });
-      Som.select();
-    }
-  });
-})();
-
 /* ---------- SAIBA MAIS: pop-up por setor — benefícios, nunca método ---------- */
 (function SaibaMais(){
   const modal=$('#modal'), card=$('#modal-card'); if(!modal) return;
   const M={
-    rh:{i:'01 / serviço', t:'Pulsar-RH', s:'Gestão de pessoas viva — para o RH e para o dono.',
+    rh:{i:'01 / ecossistema', t:'Pulsar-RH', s:'Gestão de pessoas viva — para o RH e para o dono.',
       v:['Clima medido de verdade — pesquisa anônima em que a equipe confia',
          'Rotinas sem papelada: ponto, férias e escala num portal só',
          'Desenvolvimento visível: cada pessoa sabe onde está e aonde chega',
          'Decisão de gente com número na mesa — não com achismo'],
       b:['Aplicação em 1 semana','Treinamento da equipe incluído','Dados 100% seus']},
-    finance:{i:'02 / serviço', t:'Pulsar Finance', s:'O financeiro em tempo real — não o retrato do mês passado.',
+    finance:{i:'02 / ecossistema', t:'Pulsar Finance', s:'O financeiro em tempo real — não o retrato do mês passado.',
       v:['O caixa de hoje na tela — decisão com o número vivo',
          'Fechamento no prazo, todo mês, sem correria',
          'Previsibilidade: surpresa de caixa deixa de existir',
@@ -723,8 +674,7 @@ const Ribbon = (() => {
       +'<ul class="Modal__ul">'+m.v.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
       +(m.dev?'<div class="Modal__dev">'+m.dev+'</div>':'')
       +'<div class="Modal__badges">'+m.b.map((x,i)=>'<span class="Modal__badge'+(i===0?' Modal__badge--hero':'')+'">'+x+'</span>').join('')+'</div>'
-      +'<button class="Modal__cta" data-goto="#contact">Entrar em contato <span>&rarr;</span></button>'
-      +(k!=='custom'?'<button class="Modal__cta Modal__cta--ghost" data-demo-open="'+k+'">Ver demonstração</button>':'');
+      +'<button class="Modal__cta" data-goto="#contact">Entrar em contato <span>&rarr;</span></button>';
     document.body.dataset.modal='open'; Som.select();
   }
   const fechar=()=>{ document.body.dataset.modal=''; };
@@ -737,7 +687,7 @@ const Ribbon = (() => {
   });
 })();
 
-/* ---------- MOCK DEMO: cards de serviço interativos (abas, tema white-label, período) ---------- */
+/* ---------- MOCK DEMO: cards interativos — abas, tema, período e DRILL direto ---------- */
 (function MockDemo(){
   const ribbon=$('#ribbon'); if(!ribbon) return;
   ribbon.addEventListener('click', e=>{
@@ -746,6 +696,7 @@ const Ribbon = (() => {
       const scr=tab.closest('.Svc__screen');
       scr.querySelectorAll('.mk-tab[data-mktab]').forEach(t=>t.classList.toggle('on',t===tab));
       scr.querySelectorAll('.mk-body').forEach(b=>b.classList.toggle('on',b.dataset.body===tab.dataset.mktab));
+      scr.querySelectorAll('.dm-drill').forEach(d=>d.classList.remove('on'));
       Som.select(); return;
     }
     const dot=e.target.closest('.mk-dot');
@@ -755,16 +706,25 @@ const Ribbon = (() => {
       scr.querySelectorAll('.mk-dot').forEach(d=>d.classList.toggle('on',d===dot));
       Som.select(); return;
     }
-    const per=e.target.closest('.mk-per[data-per]');
+    const per=e.target.closest('.mk-per[data-per]');   // ANTES do drill: o período mora dentro do KPI clicável
     if(per){
       const body=per.closest('.mk-body');
       body.querySelectorAll('.mk-per').forEach(x=>x.classList.toggle('on',x===per));
       body.querySelectorAll('[data-jul]').forEach(el=>{
         el.classList.remove('mk-swap'); void el.offsetWidth;
-        el.textContent=el.dataset[per.dataset.per];
-        el.classList.add('mk-swap');
+        el.textContent=el.dataset[per.dataset.per]; el.classList.add('mk-swap');
       });
-      Som.select();
+      Som.select(); return;
+    }
+    if(e.target.closest('.dm-back')){
+      e.target.closest('.Svc__screen').querySelectorAll('.dm-drill').forEach(d=>d.classList.remove('on'));
+      Som.select(); return;
+    }
+    const drill=e.target.closest('[data-drill]');
+    if(drill){
+      const scr=drill.closest('.Svc__screen');
+      const alvo=scr.querySelector('.dm-drill[data-drill-panel="'+drill.dataset.drill+'"]');
+      if(alvo){ scr.querySelectorAll('.dm-drill').forEach(d=>d.classList.remove('on')); alvo.classList.add('on'); Som.select(); }
     }
   });
 })();
@@ -799,7 +759,7 @@ const Ribbon = (() => {
   $('#btn-sound').addEventListener('click',()=>Som.toggle());
   $('#btn-menu').addEventListener('click',()=>{const open=document.body.dataset.menu!=='open';document.body.dataset.menu=open?'open':'';$('#btn-menu').setAttribute('aria-expanded',String(open));Som.select();});
   $('#menu-backdrop').addEventListener('click',()=>document.body.dataset.menu='');
-  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';document.body.dataset.demo='';}});
+  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';}});
 
   // âncoras passam pelo scroll engine (senão o smooth wheel briga com o jump)
   $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
