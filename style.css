@@ -594,6 +594,22 @@ body[data-expand] .Ribbon__dim{opacity:1;pointer-events:auto}
 .Showcase__phrase.is-in{animation:phr-in .7s var(--ease-expo) forwards}
 @keyframes phr-in{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%)}}
 .Showcase__phrase.is-grad{background:var(--grad-pulse);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+/* TELA-CELULAR: "na palma da sua mão" literal */
+.Screen--phone{width:min(272px,56vw);aspect-ratio:9/18.4;border-radius:38px;
+  border:1px solid rgba(139,110,255,.4);display:flex;flex-direction:column;
+  box-shadow:0 40px 130px rgba(0,0,0,.6),0 0 0 6px #14101F,0 0 0 7px rgba(139,110,255,.22),0 0 70px rgba(112,72,232,.18)}
+.Phone__top{display:flex;justify-content:center;padding:10px 0 4px}
+.Phone__speaker{width:54px;height:5px;border-radius:3px;background:#1D1B2E;display:block}
+.Phone__head{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--c-hair)}
+.Phone__head .mk-live{margin-left:auto}
+.Phone__body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:12px 14px;overflow:hidden}
+.Phone__nav{display:flex;justify-content:space-around;align-items:center;padding:10px 10px 14px;border-top:1px solid var(--c-hair)}
+.Phone__nav svg{width:20px;height:20px;color:var(--c-dim)}
+.Phone__nav svg.on{color:#A78BFA}
+.mk-bar--sm{grid-template-columns:96px 1fr 32px;font-size:10.5px}
+.tour-cursor--tap{width:22px;height:22px}
+.tour-cursor--tap::before{content:"";position:absolute;inset:2px;border-radius:50%;
+  background:rgba(234,238,246,.32);border:1.5px solid rgba(234,238,246,.6)}
 .tour-cursor{position:absolute;left:var(--p0x,72%);top:var(--p0y,80%);z-index:7;width:18px;height:18px;pointer-events:none;
   filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));animation:tour-move 7s ease-in-out infinite}
 .tour-cursor::after{content:"";position:absolute;left:-8px;top:-8px;width:32px;height:32px;border-radius:50%;
@@ -716,6 +732,7 @@ body[data-modal="open"] .Modal__card{opacity:1;transform:none}
 @media (max-width:768px){ /* breakpoint único, como no alvo (769px) */
   .Sec--showcase{height:470vh}
   .Screen{width:90vw}
+  .Screen--phone{width:min(272px,68vw)}
   .Screen .val{font-size:22px}
   .Works__item{grid-template-columns:1fr;gap:6px}
   .Works__impression{grid-column:1;grid-row:auto;justify-self:start}
