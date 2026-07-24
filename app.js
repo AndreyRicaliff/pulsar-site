@@ -123,7 +123,7 @@ const Scroll = (() => {
   const max = ()=>document.documentElement.scrollHeight-innerHeight;
   if(smooth){
     addEventListener('wheel',e=>{
-      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open') return;
+      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open'||document.body.dataset.demo==='open') return;
       e.preventDefault();
       target=clamp(target+e.deltaY,0,max());
     },{passive:false});
@@ -635,6 +635,62 @@ const Ribbon = (() => {
   };
 })();
 
+/* ---------- DEMO: dashboard de demonstração interativo (tela cheia) ---------- */
+(function DemoDash(){
+  const root=$('#demo'); if(!root) return;
+  const win=$('#demo-win');
+  function setProd(p){
+    root.dataset.prod=p;
+    root.querySelectorAll('[data-prod-btn]').forEach(b=>b.classList.toggle('on',b.dataset.prodBtn===p));
+    root.querySelectorAll('[data-prod-pane]').forEach(pn=>pn.hidden=pn.dataset.prodPane!==p);
+    fecharDrills();
+  }
+  function fecharDrills(){ root.querySelectorAll('.dm-drill').forEach(d=>d.classList.remove('on')); }
+  document.addEventListener('click', e=>{
+    const open=e.target.closest('button[data-demo-open]');
+    if(open){
+      document.body.dataset.modal='';                       // se veio do Saiba mais, fecha
+      if(open.dataset.demoOpen) setProd(open.dataset.demoOpen);
+      document.body.dataset.demo='open'; Som.select(); return;
+    }
+    if(!root.contains(e.target)) return;
+    if(e.target.closest('.Demo__x')||e.target.id==='demo-backdrop'){ document.body.dataset.demo=''; Som.select(); return; }
+    const pb=e.target.closest('.dm-prod-btn');
+    if(pb){ setProd(pb.dataset.prodBtn); Som.select(); return; }
+    const tab=e.target.closest('.dm-tab');
+    if(tab){
+      const pane=tab.closest('.dm-prod');
+      pane.querySelectorAll('.dm-tab').forEach(t=>t.classList.toggle('on',t===tab));
+      pane.querySelectorAll('.dm-pane').forEach(b=>b.classList.toggle('on',b.dataset.pane===tab.dataset.dmtab));
+      fecharDrills(); Som.select(); return;
+    }
+    const dot=e.target.closest('.mk-dot');
+    if(dot && dot.closest('.Demo__bar')){
+      win.dataset.mktheme=dot.dataset.theme;
+      root.querySelectorAll('.Demo__bar .mk-dot').forEach(d=>d.classList.toggle('on',d===dot));
+      Som.select(); return;
+    }
+    const per=e.target.closest('.mk-per[data-per]');   // ANTES do drill: o período mora dentro do KPI clicável
+    if(!per){
+      const drill=e.target.closest('[data-drill]');
+      if(drill){
+        const alvo=root.querySelector('.dm-drill[data-drill-panel="'+drill.dataset.drill+'"]');
+        if(alvo){ fecharDrills(); alvo.classList.add('on'); Som.select(); } return;
+      }
+      if(e.target.closest('.dm-back')){ fecharDrills(); Som.select(); return; }
+    }
+    if(per){
+      const pane=per.closest('.dm-pane');
+      pane.querySelectorAll('.mk-per').forEach(x=>x.classList.toggle('on',x===per));
+      pane.querySelectorAll('[data-jul]').forEach(el=>{
+        el.classList.remove('mk-swap'); void el.offsetWidth;
+        el.textContent=el.dataset[per.dataset.per]; el.classList.add('mk-swap');
+      });
+      Som.select();
+    }
+  });
+})();
+
 /* ---------- SAIBA MAIS: pop-up por setor — benefícios, nunca método ---------- */
 (function SaibaMais(){
   const modal=$('#modal'), card=$('#modal-card'); if(!modal) return;
@@ -667,7 +723,8 @@ const Ribbon = (() => {
       +'<ul class="Modal__ul">'+m.v.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
       +(m.dev?'<div class="Modal__dev">'+m.dev+'</div>':'')
       +'<div class="Modal__badges">'+m.b.map((x,i)=>'<span class="Modal__badge'+(i===0?' Modal__badge--hero':'')+'">'+x+'</span>').join('')+'</div>'
-      +'<button class="Modal__cta" data-goto="#contact">Entrar em contato <span>&rarr;</span></button>';
+      +'<button class="Modal__cta" data-goto="#contact">Entrar em contato <span>&rarr;</span></button>'
+      +(k!=='custom'?'<button class="Modal__cta Modal__cta--ghost" data-demo-open="'+k+'">Ver demonstração</button>':'');
     document.body.dataset.modal='open'; Som.select();
   }
   const fechar=()=>{ document.body.dataset.modal=''; };
@@ -742,7 +799,7 @@ const Ribbon = (() => {
   $('#btn-sound').addEventListener('click',()=>Som.toggle());
   $('#btn-menu').addEventListener('click',()=>{const open=document.body.dataset.menu!=='open';document.body.dataset.menu=open?'open':'';$('#btn-menu').setAttribute('aria-expanded',String(open));Som.select();});
   $('#menu-backdrop').addEventListener('click',()=>document.body.dataset.menu='');
-  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';}});
+  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';document.body.dataset.demo='';}});
 
   // âncoras passam pelo scroll engine (senão o smooth wheel briga com o jump)
   $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
