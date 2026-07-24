@@ -14,6 +14,9 @@ const lerp = (a,b,t)=>a+(b-a)*t;
 const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
 const $ = s=>document.querySelector(s);
 const $$ = s=>[...document.querySelectorAll(s)];
+// dwell: platôs no progresso — a câmera SEGURA em cada tela (h = fração parada do trecho)
+const snap=(x,h)=>{const i=Math.round(x);let d=x-i;const half=h/2;
+  d=Math.abs(d)<=half?0:(d-Math.sign(d)*half)/(1-h);return i+d;};
 
 /* ---------- [B] SOM SINTETIZADO (WebAudio, zero asset) ----------
    Regras pagas em projeto: AudioContext criado NO GESTO e antes de
@@ -123,7 +126,7 @@ const Scroll = (() => {
   const max = ()=>document.documentElement.scrollHeight-innerHeight;
   if(smooth){
     addEventListener('wheel',e=>{
-      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open') return;
+      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open'||document.body.dataset.expand) return;
       e.preventDefault();
       target=clamp(target+e.deltaY,0,max());
     },{passive:false});
@@ -575,7 +578,7 @@ const Showcase = (() => {
   let visible=false;
   new IntersectionObserver(es=>es.forEach(e=>visible=e.isIntersecting),{threshold:0}).observe(sec);
   function apply(p){
-    const travel=(p*N-0.5)*GAP;                     // câmera anda de antes da tela 0 até logo após a última
+    const travel=snap(p*N-0.5,.55)*GAP;   // pausa de ~55% do trecho em cada tela                     // câmera anda de antes da tela 0 até logo após a última
     stage.style.transform=`translateZ(${travel.toFixed(1)}px)`;
     let focus=0,best=1e9;
     screens.forEach((s,i)=>{
@@ -634,11 +637,11 @@ const Ribbon = (() => {
     if(cap) cap.textContent=names[focus];
   }
   return {
-    apply(p){ cur=p*(N-1); place(cur); },               // estado direto (static)
+    apply(p){ cur=snap(p*(N-1),.5); place(cur); },               // estado direto (static)
     update(){
       if(!visible) return;
       const p=clamp((Scroll.y-sec.offsetTop)/Math.max(1,sec.offsetHeight-innerHeight),0,1);
-      cur=lerp(cur, p*(N-1), .12);                       // damping exponencial -> desliza suave
+      cur=lerp(cur, snap(p*(N-1),.5), .12);   // pausa em cada card                       // damping exponencial -> desliza suave
       place(cur);
     }
   };
@@ -727,7 +730,22 @@ const Ribbon = (() => {
       const scr=drill.closest('.Svc__screen');
       const alvo=scr.querySelector('.dm-drill[data-drill-panel="'+drill.dataset.drill+'"]');
       if(alvo){ scr.querySelectorAll('.dm-drill').forEach(d=>d.classList.remove('on')); alvo.classList.add('on'); Som.select(); }
+      return;
     }
+    const ex=e.target.closest('.mk-expand');
+    if(ex){
+      const card=ex.closest('.Svc');
+      const abrir=!card.classList.contains('is-expanded');
+      $$('#ribbon .Svc').forEach(c=>c.classList.remove('is-expanded'));
+      if(abrir){ card.classList.add('is-expanded'); document.body.dataset.expand='open'; }
+      else delete document.body.dataset.expand;
+      Som.select();
+    }
+  });
+  const dim=$('#ribbon-dim');
+  if(dim) dim.addEventListener('click',()=>{
+    $$('#ribbon .Svc').forEach(c=>c.classList.remove('is-expanded'));
+    delete document.body.dataset.expand; Som.select();
   });
 })();
 
@@ -761,7 +779,7 @@ const Ribbon = (() => {
   $('#btn-sound').addEventListener('click',()=>Som.toggle());
   $('#btn-menu').addEventListener('click',()=>{const open=document.body.dataset.menu!=='open';document.body.dataset.menu=open?'open':'';$('#btn-menu').setAttribute('aria-expanded',String(open));Som.select();});
   $('#menu-backdrop').addEventListener('click',()=>document.body.dataset.menu='');
-  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';}});
+  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';$$('.Svc.is-expanded').forEach(c=>c.classList.remove('is-expanded'));delete document.body.dataset.expand;}});
 
   // âncoras passam pelo scroll engine (senão o smooth wheel briga com o jump)
   $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{

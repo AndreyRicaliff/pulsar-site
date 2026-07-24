@@ -406,7 +406,7 @@ body[data-started] .KV__scroll{opacity:1}
    MÓDULO 12c — SERVICE ribbon: coverflow 3D lateral (POV que desliza)
    Cards de serviço numa curva horizontal; scroll gira o "coverflow".
    ============================================================ */
-.Sec--service{height:250vh;min-height:0;padding:0;display:block}
+.Sec--service{height:300vh;min-height:0;padding:0;display:block}
 .Ribbon__sticky{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1250px;
   perspective-origin:50% 44%;display:flex;align-items:center;justify-content:center}
 .Ribbon__sticky>.Sec__label{position:absolute;top:26px;left:var(--pad);z-index:6}
@@ -440,6 +440,22 @@ body[data-started] .KV__scroll{opacity:1}
 .Ribbon__dots{display:flex;gap:8px}
 .Ribbon__dots i{width:8px;height:8px;border-radius:50%;background:var(--c-hair);transition:.3s}
 .Ribbon__dots i.on{background:var(--c-accent2);transform:scale(1.3)}
+.Ribbon__hint{position:absolute;top:calc(20px + clamp(38px,7.5vw,80px));left:50%;transform:translateX(-50%);z-index:6;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--c-accent2);white-space:nowrap}
+.Ribbon__hint i{width:6px;height:6px;border-radius:50%;background:#A55EFF;display:inline-block;margin-right:8px;
+  animation:mk-beat 2s ease-in-out infinite}
+.Ribbon__dim{position:fixed;inset:0;z-index:65;background:rgba(4,3,10,.66);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:opacity .35s ease}
+body[data-expand] .Ribbon__dim{opacity:1;pointer-events:auto}
+.mk-expand{margin-left:10px;color:var(--c-dim);cursor:pointer;padding:4px;border-radius:6px;transition:color .25s,background .25s}
+.mk-expand:hover{color:var(--c-fg);background:rgba(112,72,232,.15)}
+/* card EXPANDIDO: o dash abre grande, tudo continua interativo dentro */
+.Svc.is-expanded{position:fixed!important;left:50%!important;top:50%!important;width:min(1120px,94vw)!important;
+  transform:translate(-50%,-50%)!important;opacity:1!important;filter:none!important;z-index:70!important;
+  max-height:88vh;overflow:auto}
+.Svc.is-expanded .Svc__screen{min-height:470px}
+.Svc.is-expanded .mk-expand{color:var(--c-fg);background:rgba(112,72,232,.25)}
 .Svc--custom{grid-template-columns:1fr;background:#F5F3FA;color:#141428;border-color:#E3DEF0}  /* tema BRANCO (white-label) */
 .Svc--custom .Svc__idx{color:#7048E8}
 .Svc--custom .Cst__name{color:#141428}
@@ -486,7 +502,7 @@ body[data-started] .KV__scroll{opacity:1}
    Câmera "voa" por um corredor de telas mockup dos produtos Pulsar.
    Telas = DOM real com 3D transforms; scroll dirige o translateZ do palco.
    ============================================================ */
-.Sec--showcase{height:460vh;min-height:0;padding:0;display:block}
+.Sec--showcase{height:520vh;min-height:0;padding:0;display:block}
 .Showcase__sticky{position:sticky;top:0;height:100vh;overflow:hidden;
   perspective:1500px;perspective-origin:50% 45%;display:flex;align-items:center;justify-content:center}
 .Showcase__sticky>.Sec__label{position:absolute;top:26px;left:var(--pad);z-index:6}
@@ -681,20 +697,11 @@ body[data-modal="open"] .Modal__card{opacity:1;transform:none}
 .mk-swap{animation:mkswap .3s var(--ease-expo)}
 @keyframes mkswap{from{opacity:0;transform:translateY(5px)}}
 /* temas do screen: as vars locais re-pintam os componentes mk-* (white-label provado) */
-.Svc__screen{--mk-a:#7048E8;--mk-a2:#A78BFA}
 .Svc__screen{transition:background .45s ease,color .45s ease}
 .Svc__screen[data-mktheme="light"]{--c-surface:#FFFFFF;--c-surface2:#F3F1FA;--c-hair:#E2DEF0;--c-fg:#1B1830;
   --c-dim:#6E6890;--c-good:#2E8B63;background:#F7F6FB;color:#1B1830}
 .Svc__screen[data-mktheme="light"] .mk-table tr.tot td{color:#1B1830}
 .Svc__screen[data-mktheme="light"] .mk-donut text:first-of-type{fill:#1B1830}
-.Svc__screen[data-mktheme="gold"]{--mk-a:#C9A227;--mk-a2:#E4C55B}
-.Svc__screen [stroke="#7048E8"]{stroke:var(--mk-a)}
-.Svc__screen [fill="#7048E8"]{fill:var(--mk-a)}
-.Svc__screen [stroke="#A78BFA"]{stroke:var(--mk-a2)}
-.Svc__screen [fill="#A78BFA"]{fill:var(--mk-a2)}
-.Svc__screen [stop-color="#7048E8"]{stop-color:var(--mk-a)}
-.Svc__screen[data-mktheme="gold"] .tbar i,.Svc__screen[data-mktheme="gold"] .mk-bar .fill{background:linear-gradient(90deg,#7d651a,var(--mk-a))}
-.Svc__screen[data-mktheme="gold"] .mk-tab.on,.Svc__screen[data-mktheme="gold"] .mk-per.on{background:rgba(201,162,39,.22)}
 .Showcase__hud{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:6;
   display:flex;gap:16px;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--c-dim)}
@@ -704,7 +711,7 @@ body[data-modal="open"] .Modal__card{opacity:1;transform:none}
 .Showcase__dots i.on{background:var(--c-accent2);transform:scale(1.35)}
 
 @media (max-width:768px){ /* breakpoint único, como no alvo (769px) */
-  .Sec--showcase{height:420vh}
+  .Sec--showcase{height:470vh}
   .Screen{width:90vw}
   .Screen .val{font-size:22px}
   .Works__item{grid-template-columns:1fr;gap:6px}
