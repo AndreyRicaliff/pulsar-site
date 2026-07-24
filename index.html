@@ -63,6 +63,12 @@
 
 <div class="Rail" id="rail" aria-hidden="true"></div>
 
+<!-- MODAL "Saiba mais": vantagens por setor, nível benefício (nada replicável) -->
+<div class="Modal" id="modal" role="dialog" aria-modal="true" aria-label="Saiba mais">
+  <div class="Modal__backdrop" id="modal-backdrop"></div>
+  <div class="Modal__card" id="modal-card"></div>
+</div>
+
 <main id="main">
 
   <!-- ===================== KV / HERO ===================== -->
@@ -336,6 +342,7 @@
               <li>Clima da equipe acompanhado de perto</li>
             </ul>
             <div class="Svc__chips"><span class="Svc__chip">pessoas</span><span class="Svc__chip">clareza</span><span class="Svc__chip">leveza</span></div>
+            <button class="Svc__more" data-modal="rh">Saiba mais <span>&rarr;</span></button>
           </div>
         </article>
 
@@ -391,6 +398,7 @@
               <li>Fechamento leve e no prazo, todo mês</li>
             </ul>
             <div class="Svc__chips"><span class="Svc__chip">clareza</span><span class="Svc__chip">previsibilidade</span><span class="Svc__chip">confiança</span></div>
+            <button class="Svc__more" data-modal="finance">Saiba mais <span>&rarr;</span></button>
           </div>
         </article>
 
@@ -421,6 +429,7 @@
           <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><h4>Objetivo próprio</h4><p>Cada decisão do produto serve à sua meta — construído de trás pra frente a partir dela.</p></div>
         </div>
         <div class="Cst__foot">
+          <button class="Cst__more" data-modal="custom">Saiba mais</button>
           <a class="Cst__cta" href="#contact">Entrar em contato <span>&rarr;</span></a>
           <p class="Cst__note">Projeto sob medida se acerta no contato — cada escopo é único.</p>
         </div>

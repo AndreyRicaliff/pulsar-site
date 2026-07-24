@@ -123,7 +123,7 @@ const Scroll = (() => {
   const max = ()=>document.documentElement.scrollHeight-innerHeight;
   if(smooth){
     addEventListener('wheel',e=>{
-      if(document.body.dataset.menu==='open') return;
+      if(document.body.dataset.menu==='open'||document.body.dataset.modal==='open') return;
       e.preventDefault();
       target=clamp(target+e.deltaY,0,max());
     },{passive:false});
@@ -635,6 +635,51 @@ const Ribbon = (() => {
   };
 })();
 
+/* ---------- SAIBA MAIS: pop-up por setor — benefícios, nunca método ---------- */
+(function SaibaMais(){
+  const modal=$('#modal'), card=$('#modal-card'); if(!modal) return;
+  const M={
+    rh:{i:'01 / serviço', t:'Pulsar-RH', s:'Gestão de pessoas viva — para o RH e para o dono.',
+      v:['Clima medido de verdade — pesquisa anônima em que a equipe confia',
+         'Rotinas sem papelada: ponto, férias e escala num portal só',
+         'Desenvolvimento visível: cada pessoa sabe onde está e aonde chega',
+         'Decisão de gente com número na mesa — não com achismo'],
+      b:['Aplicação em 1 semana','Treinamento da equipe incluído','Dados 100% seus']},
+    finance:{i:'02 / serviço', t:'Pulsar Finance', s:'O financeiro em tempo real — não o retrato do mês passado.',
+      v:['O caixa de hoje na tela — decisão com o número vivo',
+         'Fechamento no prazo, todo mês, sem correria',
+         'Previsibilidade: surpresa de caixa deixa de existir',
+         'Do número-mestre ao detalhe do lançamento em dois cliques'],
+      b:['Aplicação em 1 semana','Acompanhamento próximo da AG','Dados 100% seus']},
+    custom:{i:'sob medida', t:'Custom', s:'A plataforma com a sua marca, no seu objetivo.',
+      v:['Identidade própria — o produto leva o nome da sua empresa',
+         'Telas e regras moldadas ao seu processo, não o contrário',
+         'Integrações escolhidas por você — entra só o que serve',
+         'Construído de trás pra frente a partir da sua meta'],
+      dev:'<b>Desenvolvimento incluído:</b> conversa e escopo &rarr; construção sob medida com acompanhamento de perto &rarr; aplicação e ajuste fino junto com o seu time.',
+      b:['Escopo acertado em conversa','Desenvolvimento incluído','Aplicação acompanhada']},
+  };
+  function abrir(k){
+    const m=M[k]; if(!m) return;
+    card.innerHTML='<button class="Modal__x" aria-label="fechar">&times;</button>'
+      +'<div class="Modal__idx">'+m.i+'</div><h3 class="Modal__t">'+m.t+'</h3>'
+      +'<p class="Modal__s">'+m.s+'</p>'
+      +'<ul class="Modal__ul">'+m.v.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
+      +(m.dev?'<div class="Modal__dev">'+m.dev+'</div>':'')
+      +'<div class="Modal__badges">'+m.b.map((x,i)=>'<span class="Modal__badge'+(i===0?' Modal__badge--hero':'')+'">'+x+'</span>').join('')+'</div>'
+      +'<button class="Modal__cta" data-goto="#contact">Entrar em contato <span>&rarr;</span></button>';
+    document.body.dataset.modal='open'; Som.select();
+  }
+  const fechar=()=>{ document.body.dataset.modal=''; };
+  document.addEventListener('click', e=>{
+    const btn=e.target.closest('button[data-modal]');  // button: senão o body (data-modal="open") engole o clique
+    if(btn){ abrir(btn.dataset.modal); return; }
+    if(e.target.closest('.Modal__x')||e.target.id==='modal-backdrop'){ fechar(); Som.select(); return; }
+    const go=e.target.closest('[data-goto]');
+    if(go){ fechar(); const el=$(go.dataset.goto); if(el){ Scroll.to(el); Som.select(); } }
+  });
+})();
+
 /* ---------- MOCK DEMO: cards de serviço interativos (abas, tema white-label, período) ---------- */
 (function MockDemo(){
   const ribbon=$('#ribbon'); if(!ribbon) return;
@@ -697,7 +742,7 @@ const Ribbon = (() => {
   $('#btn-sound').addEventListener('click',()=>Som.toggle());
   $('#btn-menu').addEventListener('click',()=>{const open=document.body.dataset.menu!=='open';document.body.dataset.menu=open?'open':'';$('#btn-menu').setAttribute('aria-expanded',String(open));Som.select();});
   $('#menu-backdrop').addEventListener('click',()=>document.body.dataset.menu='');
-  addEventListener('keydown',e=>{if(e.key==='Escape')document.body.dataset.menu='';});
+  addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.dataset.menu='';document.body.dataset.modal='';}});
 
   // âncoras passam pelo scroll engine (senão o smooth wheel briga com o jump)
   $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
