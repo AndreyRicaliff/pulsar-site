@@ -571,6 +571,7 @@ const Showcase = (() => {
   const titles=screens.map(s=>s.dataset.cap||'');
   const phrases=screens.map(s=>s.dataset.phrase||'');
   const ph=$('#showcase-phrase'); let lastF=-1;
+  const leg=$$('#showcase-legend .sl-item');
   let visible=false;
   new IntersectionObserver(es=>es.forEach(e=>visible=e.isIntersecting),{threshold:0}).observe(sec);
   function apply(p){
@@ -589,6 +590,7 @@ const Showcase = (() => {
     });
     dots.forEach((d,i)=>d.classList.toggle('on',i===focus));
     if(cap) cap.textContent=titles[focus];
+    leg.forEach((el,i)=>el.classList.toggle('on',i===focus));
     if(ph && focus!==lastF){ lastF=focus;                  // a frase-diferencial acompanha o foco
       ph.textContent=phrases[focus];
       ph.classList.toggle('is-grad', focus%2===1);         // alterna branco/roxo
