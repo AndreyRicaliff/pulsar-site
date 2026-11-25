@@ -69,14 +69,30 @@
   <div class="Modal__card" id="modal-card"></div>
 </div>
 
+<!-- sprite das marcas de produto: as cenas dos works usam <use>; as telas do showcase/service
+     ainda têm cópias inline (migração anotada em PENDENCIAS.md) -->
+<svg hidden aria-hidden="true">
+  <symbol id="mk-fin" viewBox="0 0 24 24"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#7048E8" stroke-width="1.3"/><path d="M6 12 H9.5 L11 8.5 L13.5 15.5 L15 12 H18" stroke="currentColor" stroke-width="1.2"/></symbol>
+  <symbol id="mk-rh" viewBox="0 0 24 24"><path d="M12 2.6 L20 12 L12 21.4 L4 12 Z" stroke="#7048E8" stroke-width="1.3"/><circle cx="12" cy="10" r="2.2" fill="currentColor"/><path d="M7.8 17 a4.2 3.6 0 0 1 8.4 0 Z" fill="currentColor"/></symbol>
+</svg>
+
 <main id="main">
 
   <!-- ===================== KV / HERO ===================== -->
   <section class="Sec Sec--kv" id="top" data-sec="início" data-subs="2">
     <div class="KV__brand">
       <div class="KV__stage"><div class="KV__halo" aria-hidden="true"></div><div class="Lockup Lockup--final"><svg class="PM" viewBox="0 0 96 96" role="img" aria-label="símbolo Pulsar"><defs><linearGradient id="pmgH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7048E8"/><stop offset="1" stop-color="#A55EFF"/></linearGradient></defs><circle class="PM__ring" pathLength="100" transform="rotate(-90 48 48)" style="--o:.4" cx="48" cy="48" r="30" fill="none" stroke="#8B5CF6" stroke-width="1.6"/><circle class="PM__ping" cx="48" cy="48" r="12" fill="none" stroke="#7048E8" stroke-width="1.5"/><path class="PM__ekg" pathLength="100" d="M4 48 H30 l5 -7 l6 13 l7 -25 l8 34 l6 -19 l4 4 H92" stroke="url(#pmgH)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path class="PM__ekg2" pathLength="100" d="M4 48 H30 l5 -7 l6 13 l7 -25 l8 34 l6 -19 l4 4 H92" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><div class="Lockup__name">PULSAR</div></div><h1 class="KV__sr">PULSAR</h1></div>
-      <div class="KV__by"><svg class="KV__glyph" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="PM__ring" style="--o:.5" cx="9" cy="9" r="6.4" stroke="#8B5CF6" stroke-width="1"/><path class="PM__ekg" d="M.5 9 H5 l1 -1.6 l1.3 3 l1.4 -5.8 l1.6 7 l1.3 -4 l.7 1.4 H17.5" stroke="#A55EFF" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>por <b class="KV__grad">AG CONSULTORIA</b></span></div>
+      <div class="KV__by KV__in"><svg class="KV__glyph" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="PM__ring" style="--o:.5" cx="9" cy="9" r="6.4" stroke="#8B5CF6" stroke-width="1"/><path class="PM__ekg" d="M.5 9 H5 l1 -1.6 l1.3 3 l1.4 -5.8 l1.6 7 l1.3 -4 l.7 1.4 H17.5" stroke="#A55EFF" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>por <b class="KV__grad">AG CONSULTORIA</b></span></div>
       <div class="KV__slogan">Sinta o pulso da sua operação</div>
+      <nav class="KV__chips KV__in" aria-label="produtos da plataforma">
+        <a class="KV__chip" href="#service"><i>01</i>Pulsar<b>-RH</b></a>
+        <a class="KV__chip" href="#service"><i>02</i>Pulsar <b>Finance</b></a>
+        <a class="KV__chip" href="#custom"><i>03</i>Custom<b>&reg;</b></a>
+      </nav>
+      <div class="KV__act KV__in">
+        <a class="Cst__cta" href="#showcase">Ver a plataforma por dentro <span>&rarr;</span></a>
+        <span class="KV__micro">demonstração guiada · dados ilustrativos</span>
+      </div>
     </div>
     <div class="KV__scroll">explorar<i>&darr;</i></div>
   </section>
@@ -87,7 +103,7 @@
     <h2 class="SecTitle" data-distort>DIFERENCIAIS</h2>
     <p class="SecSub" data-reveal style="--i:1">O que faz a plataforma pulsar — em três compromissos.</p>
     <ol class="Works__list" id="works-list">
-      <li class="Works__item" data-reveal style="--i:0" data-thumb="lider">
+      <li class="Works__item" data-reveal style="--i:0" data-thumb="tempo-real">
         <span class="Works__date"><b>01</b><span>tempo real</span></span>
         <a class="Works__title" href="#" data-split>FLUXO EM TEMPO REAL</a>
         <span class="Works__impression">na hora, não no fim do mês</span>
@@ -96,7 +112,7 @@
           <i class="Works__tag">na hora</i><i class="Works__tag">sem espera</i><i class="Works__tag">confiança</i>
         </span>
       </li>
-      <li class="Works__item" data-reveal style="--i:1" data-thumb="beto">
+      <li class="Works__item" data-reveal style="--i:1" data-thumb="integracao">
         <span class="Works__date"><b>02</b><span>integração</span></span>
         <a class="Works__title" href="#" data-split>TUDO CONECTADO</a>
         <span class="Works__impression">no mesmo pulso</span>
@@ -105,7 +121,7 @@
           <i class="Works__tag">unificado</i><i class="Works__tag">automático</i><i class="Works__tag">seguro</i>
         </span>
       </li>
-      <li class="Works__item" data-reveal style="--i:2" data-thumb="hub">
+      <li class="Works__item" data-reveal style="--i:2" data-thumb="paineis">
         <span class="Works__date"><b>03</b><span>painéis</span></span>
         <a class="Works__title" href="#" data-split>PAINÉIS VIVOS</a>
         <span class="Works__impression">KPIs que respiram</span>
@@ -115,9 +131,41 @@
         </span>
       </li>
     </ol>
+    <div class="Works__ekg" aria-hidden="true"><svg viewBox="0 0 900 26" preserveAspectRatio="none"><path d="M0 13 H386 l9 -7 l12 14 l13 -19 l12 15 l9 -7 H900" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <a class="Works__more" href="#service" data-reveal data-scramble>Conhecer o ecossistema</a>
-    <figure class="Works__thumb" id="works-thumb">
-      <canvas id="thumb-canvas" aria-hidden="true"></canvas>
+    <!-- thumb flutuante: mini-cena de PRODUTO por diferencial (tela com chrome + card saindo do quadro) -->
+    <figure class="Works__thumb" id="works-thumb" aria-hidden="true">
+      <div class="Works__scene" data-scene="tempo-real" data-cap="Pulsar Finance · caixa ao vivo — dados ilustrativos" aria-hidden="true">
+        <div class="Screen__bar"><svg class="Screen__mark" fill="none"><use href="#mk-fin"/></svg><span class="Screen__title">Pulsar <b>Finance</b></span><span class="mk-live"><i></i>ao vivo</span></div>
+        <div class="Screen__body">
+          <div class="mk-kpi"><div class="lbl">Caixa · hoje</div>
+            <div class="mk-flex" style="align-items:flex-end;justify-content:space-between"><div class="val">R$ 318.400</div>
+            <svg width="104" height="32" viewBox="0 0 104 32" aria-hidden="true"><polyline points="0,25 15,21 30,23 45,15 60,18 75,9 90,12 104,5" fill="none" stroke="#7048E8" stroke-width="1.8"/><circle cx="104" cy="5" r="2.6" fill="#7048E8"/></svg></div>
+            <div class="dl">▲ 9,4% na semana · conciliado até agora</div></div>
+        </div>
+        <div class="ws-float"><span class="mk-badge ok">agora</span><b>+ R$ 18.400</b><span>recebimento conciliado</span></div>
+      </div>
+      <div class="Works__scene" data-scene="integracao" data-cap="Pulsar Finance · conexões — dados ilustrativos" aria-hidden="true">
+        <div class="Screen__bar"><svg class="Screen__mark" fill="none"><use href="#mk-fin"/></svg><span class="Screen__title">Pulsar <b>Finance</b></span><span class="Screen__tag">conexões</span></div>
+        <div class="Screen__body">
+          <div class="mk-move" style="border-top:none"><span><b>Seu ERP</b> · lançamentos</span><span class="mk-badge ok">sincronizado</span></div>
+          <div class="mk-move"><span><b>Banco</b> · extrato</span><span class="mk-badge ok">conciliado</span></div>
+          <div class="mk-move"><span><b>Folha e ponto</b></span><span class="mk-badge ok">importado</span></div>
+        </div>
+        <div class="ws-float"><b>3 fontes</b><span>no mesmo pulso</span></div>
+      </div>
+      <div class="Works__scene" data-scene="paineis" data-cap="Pulsar-RH · painel de pessoas — dados ilustrativos" aria-hidden="true">
+        <div class="Screen__bar"><svg class="Screen__mark" fill="none"><use href="#mk-rh"/></svg><span class="Screen__title">Pulsar<b>-RH</b></span><span class="Screen__tag">pessoas</span></div>
+        <div class="Screen__body">
+          <div class="mk-row">
+            <div class="mk-mini"><div class="lbl">Colab.</div><div class="val">142</div><div class="mk-delta">▲ 4</div></div>
+            <div class="mk-mini"><div class="lbl">Turnover</div><div class="val good">4,2%</div><div class="mk-delta">▼ 0,6</div></div>
+            <div class="mk-mini"><div class="lbl">Clima</div><div class="val">8,1</div><div class="mk-delta">▲ 0,3</div></div>
+          </div>
+          <div class="mk-bar"><span>PDI em dia</span><div class="track"><div class="fill" style="width:84%"></div></div><span class="pct">84%</span></div>
+        </div>
+        <div class="ws-float"><span class="mk-badge ok">admissão</span><b>Maria C.</b><span>Comercial · hoje</span></div>
+      </div>
       <figcaption id="thumb-caption">—</figcaption>
     </figure>
   </section>
@@ -524,10 +572,24 @@
           <p class="Cst__tagline">A plataforma é <b>sua</b> — construída no seu objetivo, com a sua marca. Sem molde, sem limite de modelo.</p>
         </div>
         <div class="Cst__benefits">
-          <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9 H21"/><circle cx="6.2" cy="6.7" r=".7" fill="currentColor" stroke="none"/><path d="M8 14 H16 M8 16.5 H13"/></svg><h4>Identidade própria · white-label</h4><p>Sua marca, sua cara. O produto leva o nome da sua empresa — não o nosso.</p></div>
+          <div class="Cst__b Cst__b--hero"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9 H21"/><circle cx="6.2" cy="6.7" r=".7" fill="currentColor" stroke="none"/><path d="M8 14 H16 M8 16.5 H13"/></svg><h4>Identidade própria · white-label</h4><p>Sua marca, sua cara. O produto leva o nome da sua empresa — não o nosso.</p></div>
           <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8 H20 M4 16 H20"/><circle cx="9" cy="8" r="2.4" fill="#F5F3FA"/><circle cx="15" cy="16" r="2.4" fill="#F5F3FA"/></svg><h4>Características customizáveis</h4><p>Módulos, telas e regras moldados ao seu processo — não o contrário.</p></div>
           <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6.5" r="2.3"/><circle cx="18" cy="6.5" r="2.3"/><circle cx="12" cy="17.5" r="2.3"/><path d="M7.6 8 L11 15.6 M16.4 8 L13 15.6 M8.3 6.5 H15.7"/></svg><h4>Integrações escolhidas</h4><p>Conecta com o que você já usa. Você decide o quê entra e o quê fica de fora.</p></div>
           <div class="Cst__b"><svg class="Cst__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><h4>Objetivo próprio</h4><p>Cada decisão do produto serve à sua meta — construído de trás pra frente a partir dela.</p></div>
+        </div>
+        <div class="Cst__split">
+          <div class="Cst__split-lead">
+            <h4>Feito para o seu setor</h4>
+            <p>O mesmo núcleo vivo — telas, regras e indicadores moldados ao jeito do seu mercado.</p>
+          </div>
+          <ul class="Cst__setores">
+            <li>Varejo e lojas</li>
+            <li>Serviços e consultorias</li>
+            <li>Distribuição e logística</li>
+            <li>Clínicas e saúde</li>
+            <li>Indústria</li>
+            <li>Redes e franquias</li>
+          </ul>
         </div>
         <div class="Cst__foot">
           <button class="Cst__more" data-modal="custom">Saiba mais</button>

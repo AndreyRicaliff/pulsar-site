@@ -284,17 +284,32 @@ body[data-menu="open"] .SideMenu__item a{transform:none;transition-delay:calc(va
 .Lockup--final .Lockup__name{opacity:0;transform:translateY(10px)}
 body[data-started] .Lockup--final .Lockup__name{opacity:1;transform:none;
   transition:opacity .9s var(--ease-expo) .25s,transform .9s var(--ease-expo) .25s}
-.KV__by{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:clamp(12px,1.5vw,16px);letter-spacing:.34em;text-transform:uppercase;
-  color:var(--c-dim);opacity:0;transform:translateY(10px);transition:opacity .8s .7s,transform .8s .7s}
-body[data-started] .KV__by{opacity:1;transform:none}
+/* reveal da dobra: cada peça entra com o mesmo gesto; só o atraso (--d) muda */
+.KV__in{opacity:0;transform:translateY(10px);transition:opacity .8s var(--d,0s),transform .8s var(--d,0s)}
+body[data-started] .KV__in{opacity:1;transform:none}
+.KV__by{--d:.7s;display:inline-flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:clamp(12px,1.5vw,16px);letter-spacing:.34em;text-transform:uppercase;
+  color:var(--c-dim)}
 .KV__by b{color:var(--c-fg);font-weight:600}
 .KV__glyph{width:15px;height:15px;flex:none}
 .KV__grad{font-weight:700;background:var(--grad-pulse);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .KV__slogan{color:var(--c-dim);font-size:14px;letter-spacing:.02em;opacity:0;transition:opacity .8s .95s}
 body[data-started] .KV__slogan{opacity:.85}
+/* molde 1 (§6): a dobra diz O QUE É (chips dos 3 produtos) e PARA ONDE IR (CTA + microcopy) */
+.KV__chips{--d:1.1s;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.KV__chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--c-dim);
+  border:1px solid var(--c-hair);border-radius:999px;padding:7px 16px;
+  transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast)}
+.KV__chip i{font-style:normal;font-size:9px;color:var(--c-accent2)}
+.KV__chip b{color:var(--c-fg);font-weight:600}
+.KV__chip:hover{border-color:var(--c-accent2);color:var(--c-fg);background:rgba(112,72,232,.06)}
+.KV__act{--d:1.3s;display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:4px}
+/* o CTA da dobra é o mesmo botão-pulso do card Custom (.Cst__cta), só menor */
+.KV__act .Cst__cta{font-size:15px;padding:13px 30px}
+.KV__micro{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--c-faint)}
 .KV__scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);text-align:center;
   font-family:var(--f-mono);font-size:var(--fs-data);letter-spacing:.16em;text-transform:uppercase;color:var(--c-faint);
-  opacity:0;transition:opacity .8s 1.15s}
+  opacity:0;transition:opacity .8s 1.5s}
 body[data-started] .KV__scroll{opacity:1}
 .KV__scroll i{display:block;margin-top:5px;font-style:normal;animation:kv-nudge 1.8s var(--ease-soft) infinite}
 @keyframes kv-nudge{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(6px);opacity:1}}
@@ -324,18 +339,34 @@ body[data-started] .KV__scroll{opacity:1}
 .Works__tags{grid-column:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .Works__tag{font-family:var(--f-mono);font-size:var(--fs-micro);letter-spacing:.08em;
   color:var(--c-dim);border:1px solid var(--c-hair);border-radius:999px;padding:3px 10px}
-.Works__more{display:inline-block;margin-top:34px;font-family:var(--f-mono);
+/* assinatura de pulso DISCRETA entre a lista e o CTA (§8: pulso dentro da composição, nunca a arte) */
+.Works__ekg{height:26px;margin-top:26px;color:var(--c-accent2);opacity:.4}
+.Works__ekg svg{width:100%;height:100%;display:block}
+.Works__more{display:inline-block;margin-top:20px;font-family:var(--f-mono);
   font-size:var(--fs-data);letter-spacing:.16em;text-transform:uppercase;
   border:1px solid var(--c-hair);padding:14px 34px;transition:background var(--t-fast),color var(--t-fast)}
 .Works__more:hover{background:var(--grad-pulse);color:#fff;border-color:transparent}
 
 .Works__thumb{
-  position:fixed;z-index:1;width:min(380px,32vw);aspect-ratio:16/10;
+  position:fixed;top:0;left:0;z-index:3;width:min(380px,32vw);aspect-ratio:16/10;
+  /* top/left 0 + z 3: o translate(x,y) do JS é coordenada de viewport (sem top/left o fixed
+     nasce na posição estática do fluxo e some); acima da lista (z 2) porque a cena é opaca */
+  will-change:transform;
   pointer-events:none;opacity:0;transition:opacity var(--t-fast) var(--ease-soft);
   border:1px solid var(--c-hair);background:var(--c-surface2);box-shadow:0 18px 50px rgba(64,28,127,.14);
 }
 .Works__thumb.is-on{opacity:1}
-.Works__thumb canvas{width:100%;height:100%}
+/* cena de produto em camadas (§8): chrome + conteúdo dentro do quadro, card flutuante saindo dele */
+.Works__scene{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--c-surface2);
+  opacity:0;transition:opacity .25s var(--ease-soft)}
+.Works__scene.on{opacity:1}
+.Works__scene .Screen__bar{padding:8px 12px}
+.Works__scene .Screen__body{padding:12px;gap:8px;height:auto;flex:1;min-height:0;overflow:hidden}
+.ws-float{position:absolute;right:-22px;bottom:-16px;display:flex;flex-direction:column;gap:2px;
+  background:var(--c-surface);border:1px solid var(--c-hair);border-radius:11px;padding:8px 13px;
+  box-shadow:0 14px 36px rgba(64,28,127,.2);font-size:10.5px;color:var(--c-dim)}
+.ws-float b{font-size:13px;color:var(--c-fg);font-variant-numeric:tabular-nums}
+.ws-float .mk-badge{margin-left:0;align-self:flex-start;margin-bottom:2px}
 .Works__thumb figcaption{
   position:absolute;left:0;bottom:-24px;font-family:var(--f-mono);
   font-size:var(--fs-micro);letter-spacing:.12em;color:var(--c-dim)}
@@ -475,6 +506,12 @@ body[data-expand] .Ribbon .Svc:not(.is-expanded){visibility:hidden}
 .Svc--custom .Cst__b h4{color:#141428}
 .Svc--custom .Cst__b p{color:#6B6B80}
 .Svc--custom .Cst__note{color:#6B6880}  /* 4,9:1 no card (o #8A8A9E dava 3,1 e reprovava AA) */
+.Svc--custom .Cst__split{border-color:#E3DEF0}
+.Svc--custom .Cst__split-lead h4{color:#141428}
+.Svc--custom .Cst__split-lead p{color:#6B6B80}
+.Svc--custom .Cst__setores li{color:#6B6B80;border-color:#E3DEF0}
+.Svc--custom .Cst__setores li::before{background:#7048E8}
+.Svc--custom .Cst__setores li:hover{color:#141428;border-color:#7048E8}
 .Sec--custom{display:flex;flex-direction:column;justify-content:center;padding-top:12vh;padding-bottom:12vh}
 .SecTitle--custom{text-align:center;font-size:clamp(44px,8vw,110px)}
 .Custom__tag{text-align:center;color:var(--c-dim);font-size:15px;line-height:1.6;margin:14px 0 40px}
@@ -486,13 +523,28 @@ body[data-expand] .Ribbon .Svc:not(.is-expanded){visibility:hidden}
 .Cst__name span{color:var(--c-accent2);font-weight:500}
 .Cst__tagline{color:var(--c-dim);font-size:14px;line-height:1.55;max-width:660px}
 .Cst__tagline b{color:var(--c-fg)}
-.Cst__benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* §7 veta grid 2×2 perfeito: destaque largo em cima + trio embaixo */
+.Cst__benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .Cst__b{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border:1px solid var(--c-hair);border-radius:13px;
   background:rgba(112,72,232,.06);transition:border-color .25s,background .25s}
 .Cst__b:hover{border-color:rgba(139,110,255,.35);background:rgba(112,72,232,.1)}
 .Cst__ic{width:26px;height:26px;color:var(--c-accent2)}
-.Cst__b h4{font-size:13.5px;font-weight:700;letter-spacing:.01em;color:var(--c-fg)}
+.Cst__b h4,.Cst__split-lead h4{font-size:13.5px;font-weight:700;letter-spacing:.01em;color:var(--c-fg)}
 .Cst__b p{font-size:11.5px;color:var(--c-dim);line-height:1.45}
+/* depois da base .Cst__b, para o display:grid vencer sem dobrar especificidade */
+.Cst__b--hero{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:2px;align-items:center;text-align:left}
+.Cst__b--hero .Cst__ic{grid-row:span 2;width:30px;height:30px}
+/* split estilo Oracle (§6): conversa à esquerda, grade de setores em 2 colunas à direita.
+   Base em tokens; o tema branco entra pelas sobrescritas .Svc--custom, como os vizinhos. */
+.Cst__split{display:grid;grid-template-columns:minmax(200px,.8fr) 1.2fr;gap:14px 24px;
+  border-top:1px solid var(--c-hair);padding-top:16px}
+.Cst__split-lead p{font-size:11.5px;color:var(--c-dim);line-height:1.5;margin-top:4px;max-width:260px}
+.Cst__setores{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 20px}
+.Cst__setores li{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--c-dim);
+  border-bottom:1px solid var(--c-hair);padding:7px 2px;transition:color var(--t-fast),border-color var(--t-fast)}
+.Cst__setores li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--c-accent2);opacity:.45;flex:none;transition:opacity var(--t-fast)}
+.Cst__setores li:hover{color:var(--c-fg);border-color:var(--c-accent2)}
+.Cst__setores li:hover::before{opacity:1}
 .Cst__foot{display:flex;align-items:center;gap:18px;margin-top:auto;flex-wrap:wrap}
 .Cst__cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:16.5px;
   letter-spacing:.01em;color:#fff;background:var(--grad-pulse);border-radius:999px;padding:16px 36px;
@@ -501,7 +553,7 @@ body[data-expand] .Ribbon .Svc:not(.is-expanded){visibility:hidden}
 .Cst__cta span{transition:transform .2s}
 .Cst__cta:hover span{transform:translateX(5px)}
 .Cst__note{font-size:11px;color:var(--c-faint);letter-spacing:.02em;max-width:260px}
-@media (max-width:768px){ .Cst__benefits{grid-template-columns:1fr} .Cst{padding:22px} }
+@media (max-width:768px){ .Cst__benefits{grid-template-columns:1fr} .Cst__b--hero{grid-column:auto} .Cst__split{grid-template-columns:1fr} .Cst{padding:22px} }
 @media (max-width:768px){ .Svc:not(.Svc--custom){grid-template-columns:1fr} .Svc{width:92vw} .Svc__screen{min-height:220px} }
 
 /* ============================================================

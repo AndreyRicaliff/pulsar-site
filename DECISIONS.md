@@ -79,3 +79,33 @@ de template poderia engolir código): se um dia precisar, tirar os comentários 
 minifica com parser e publica só a saída, e no fim um conferente que relê a saída pelo parser e derruba o deploy se
 sobrar comentário. O detalhe foi o GLSL: o shader é uma string para o JavaScript, o minificador não entra nela, então
 limpei os templates de shader pelo AST antes de minificar."
+
+## 2026-11-25 — [works/hero/custom] Criativos §8: cenas DOM de produto no lugar dos sketches generativos
+
+**Problema.** Feedback do Ricaliff: "pulsos sem nexo, apenas letras e números — preciso de criativos bem
+desenvolvidos". Os thumbs dos diferenciais eram desenhos generativos em canvas (linhas, barras, scatter)
+que não contavam história nenhuma de produto. A dobra não dizia o que é a plataforma nem para onde ir, e o
+card Custom era um grid 2×2 de texto.
+
+**Opções.** (a) Melhorar os sketches generativos (mais cor, mais forma); (b) imagens/screenshots reais dos
+produtos; (c) mini-cenas DOM/SVG reutilizando o sistema `mk-*` que o showcase já tem.
+
+**Decisão.** (c): cada diferencial acende uma cena de produto com chrome real (`Screen__bar` + marca), conteúdo
+que conta UMA história concreta ("+R$ 18.400 recebimento conciliado", "3 fontes no mesmo pulso", "Maria C. ·
+admissão") e um card flutuante saindo do quadro. Hero ganhou chips dos 3 produtos + CTA (molde 1 do §6);
+Custom ganhou destaque largo + split de setores (molde Oracle). Pulso só como assinatura discreta (EKG 26px).
+
+**Por quê.** Generativo "bonito" continua abstrato — a spec §8 pede cena de produto em camadas, e o site JÁ
+tinha o vocabulário (`mk-kpi`, `mk-move`, `mk-badge`, `Screen__*`) no showcase: reutilizar o sistema custou
+menos que desenhar no canvas e saiu consistente por construção. Screenshot real amarraria o site ao estado da
+UI dos apps; DOM rotulado "dados ilustrativos" não. De quebra saiu ~90 linhas de canvas do rAF (menos trabalho
+por frame).
+
+**Consequências.** As cenas são markup estático (fácil de editar, entra no build sem asset); o sprite
+`#mk-fin`/`#mk-rh` nasceu para as marcas (migração das cópias antigas pendente); `WorksThumb` virou toggle de
+classe. O mock mente se os números parecerem reais — por isso toda legenda carrega "dados ilustrativos".
+
+**Em entrevista (30s).** "Os thumbs eram arte generativa em canvas, bonita e vazia. Troquei por cenas DOM que
+reusam os mini-componentes do showcase: chrome de produto, um número com história e um card saindo do quadro.
+Reuso do design system me deu consistência de graça, tirei 90 linhas de canvas do loop de frame, e rotulei o
+mock de 'dados ilustrativos' para não vender número falso."
