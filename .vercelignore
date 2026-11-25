@@ -1,0 +1,6 @@
+# O site publica a raiz do repositório: tudo que não é página fica fora do deploy.
+*.md
+trilho.json
+.claude
+.vercel
+.gitignore
