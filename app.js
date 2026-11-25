@@ -686,17 +686,24 @@ const Ribbon = (() => {
     document.documentElement.dataset.static='1';  // liga o kill-switch CSS
     enter(); Choreo.revealAll();
   } else {
-    const pct=$('#load-pct'),bar=$('#load-bar');
-    const t0=performance.now(),DUR=1800;
-    // progresso via setTimeout (não rAF): completa mesmo com a aba em background
-    (function prog(){
-      const p=clamp((performance.now()-t0)/DUR,0,1);
-      const eased=1-Math.pow(1-p,3);
-      if(pct) pct.textContent=Math.round(eased*100);
-      if(bar) bar.style.width=(eased*100)+'%';
-      if(p<1){ setTimeout(prog,16); }
-      else { loading.classList.add('is-ready'); setTimeout(enter,650); } // sai sozinho, como o alvo
-    })();
+    // intro 1x por sessão (padrão splash dos apps Pulsar): revisita entra direto.
+    // Sem storage (modo privado) a intro repete — nunca pode travar o boot.
+    let revisita=false;
+    try{ revisita=sessionStorage.getItem('pulsar-intro')==='1'; sessionStorage.setItem('pulsar-intro','1'); }catch(_){}
+    if(revisita){ enter(); }
+    else{
+      const pct=$('#load-pct'),bar=$('#load-bar');
+      const t0=performance.now(),DUR=1400; // a coreografia do símbolo fecha em ~1.4s; acima disso é espera morta
+      // progresso via setTimeout (não rAF): completa mesmo com a aba em background
+      (function prog(){
+        const p=clamp((performance.now()-t0)/DUR,0,1);
+        const eased=1-Math.pow(1-p,3);
+        if(pct) pct.textContent=Math.round(eased*100);
+        if(bar) bar.style.width=(eased*100)+'%';
+        if(p<1){ setTimeout(prog,16); }
+        else { loading.classList.add('is-ready'); setTimeout(enter,400); } // sai sozinho, como o alvo
+      })();
+    }
     // Não há "click to start": o 1º gesto só ARMA o som se ele já estava ligado
     // (autoplay policy exige gesto). Som off por padrão liga só pelo toggle.
     const arm=()=>{ if(Som.enabled) Som.arm(true); removeEventListener('pointerdown',arm); removeEventListener('wheel',arm); removeEventListener('keydown',arm); };

@@ -189,7 +189,7 @@ body[data-menu="open"] .SideMenu__item a{transform:none;transition-delay:calc(va
 .Loading__reveal{display:flex;flex-direction:column;align-items:center;gap:20px}
 /* letras do loading estilizadas junto do hero (.Loading__word) */
 .Loading__center{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
-.Loading__meta{display:flex;align-items:center;gap:13px;margin-top:12px;opacity:0;animation:load-fade .6s ease 1.5s forwards}
+.Loading__meta{display:flex;align-items:center;gap:13px;margin-top:12px;opacity:0;animation:load-fade .6s ease .6s forwards}
 .Loading__bar{width:150px;height:1px;background:rgba(64,28,127,.14);overflow:hidden}
 .Loading__bar i{display:block;height:100%;background:var(--grad-pulse);width:0;transition:width .25s linear}
 .Loading__pct{font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums;color:var(--c-dim)}
@@ -266,7 +266,7 @@ body[data-menu="open"] .SideMenu__item a{transform:none;transition-delay:calc(va
    3. feixes emitem com SWEEP de rotação          4. ping de radar emana em loop */
 @keyframes pmi-glow{0%{filter:drop-shadow(0 0 0 rgba(139,110,255,0))}40%{filter:drop-shadow(0 0 30px rgba(139,110,255,.6))}100%{filter:drop-shadow(0 0 0 rgba(139,110,255,0))}}
 .Lockup--intro .PM__ring{stroke-dasharray:100.5;stroke-dashoffset:100.5;
-  animation:wd-draw .9s cubic-bezier(.5,0,.15,1) .2s forwards}
+  animation:wd-draw .9s cubic-bezier(.5,0,.15,1) forwards} /* sem delay: o 1º frame do loading nunca é vazio */
 .Lockup--intro .PM__ekg{stroke-dasharray:100.5;stroke-dashoffset:100.5;
   animation:wd-draw .8s cubic-bezier(.5,0,.15,1) .6s forwards}   /* o EKG se traça como um monitor */
 .Lockup--intro .PM__ekg2{opacity:0;animation:pmi-satfade .3s ease 1.6s forwards,ekg-run 2.6s linear 1.7s infinite}
