@@ -26,9 +26,6 @@ Repo público: nada sensível aqui (credencial, dado pessoal, caminho de explora
 - 2026-11-25 — **Botão-pulso triplicado no CSS.** `.Cst__cta`, `.Modal__cta` e `.Outro__cta--primary` são a
   mesma receita (pill gradiente + sombra roxa + seta) com números levemente divergentes; o hero agora reusa
   `.Cst__cta`. Extrair uma base (`.Btn--pulse`) e reduzir os três a modificadores.
-- 2026-11-25 — **WorksThumb lê layout a cada frame.** `update()` consulta `offsetWidth/offsetHeight` por frame
-  e o lerp roda com o ponteiro parado; a flag `on` duplica o `is-on` do classList. Pré-existente à troca das
-  cenas; medir e trocar por ResizeObserver + corte do lerp quando converge.
 - 2026-11-25 — **Sem bloco `prefers-reduced-motion`.** O site inteiro anima por transição/reveal e só tem o
   kill-switch `?static=1`; quem pede movimento reduzido no SO recebe a coreografia completa. Um
   `@media (prefers-reduced-motion: reduce)` colapsando os reveals ao estado final resolve.
