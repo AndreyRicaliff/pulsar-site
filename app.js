@@ -425,10 +425,15 @@ void main(){
   const scenes=$$('#works-stage .Works__scene');
   if(!cap||!scenes.length)return;
   $$('.Works__item').forEach(li=>{
-    li.addEventListener('pointerenter',()=>{
-      scenes.forEach(s=>{const hit=s.dataset.scene===li.dataset.thumb;s.classList.toggle('on',hit);if(hit)cap.textContent=s.dataset.cap;});
+    const show=()=>{
+      const alvo=scenes.find(s=>s.dataset.scene===li.dataset.thumb);
+      if(!alvo||alvo.classList.contains('on'))return; // toque repetido/click pós-hover: nada a trocar
+      scenes.forEach(s=>s.classList.toggle('on',s===alvo));
+      cap.textContent=alvo.dataset.cap;
       Som.hoverTick();
-    });
+    };
+    li.addEventListener('pointerenter',show);
+    li.addEventListener('click',show); // celular não tem hover: o toque troca a cena
   });
 })();
 
