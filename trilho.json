@@ -3,17 +3,69 @@
   "projeto": "pulsar-site",
   "tipo": "produto-interno",
   "objetivo": "Site institucional de apresentação do Pulsar (landing estática, deploy pela Vercel CLI).",
-  "fase": "F7",
-  "proximo": "Deploy do tema claro pela Vercel CLI e conferência no domínio servido.",
+  "fase": "F8",
+  "proximo": "Ricaliff olhar o site branco no ar e aceitar; depois aplicar INSPIRACAO.md §6 sobre o tema claro.",
   "atualizadoEm": "2026-11-25",
   "portoes": {
-    "F1.problema": { "estado": "feito", "evidencia": "README.md" },
-    "F2.lgpd": { "estado": "nao-se-aplica", "evidencia": "landing sem formulário, sem coleta de dado pessoal" },
-    "F3.stack": { "estado": "feito", "evidencia": "README.md (estático, sem build) + DECISIONS.md" },
-    "F4.repo": { "estado": "feito", "evidencia": "repositório público, auditado em 18/08 (CLAUDE.md)" },
-    "F4.rls": { "estado": "nao-se-aplica", "evidencia": "sem banco" },
-    "F4.ci": { "estado": "nao-se-aplica", "evidencia": "site estático sem build nem teste; deploy por CLI" },
-    "F5.testes": { "estado": "nao-se-aplica", "evidencia": "sem lógica testável isolada; prova é visual no navegador" },
-    "F6.revisao": { "estado": "feito", "evidencia": "revisão de 25/11: achados corrigidos no PR do tema claro, resto em PENDENCIAS.md" }
+    "F1.problema": {
+      "estado": "feito",
+      "evidencia": "README.md"
+    },
+    "F2.lgpd": {
+      "estado": "nao-se-aplica",
+      "evidencia": "landing sem formulário, sem coleta de dado pessoal"
+    },
+    "F3.stack": {
+      "estado": "feito",
+      "evidencia": "README.md (estático, sem build) + DECISIONS.md"
+    },
+    "F4.repo": {
+      "estado": "feito",
+      "evidencia": "repositório público, auditado em 18/08 (CLAUDE.md)"
+    },
+    "F4.rls": {
+      "estado": "nao-se-aplica",
+      "evidencia": "sem banco"
+    },
+    "F4.ci": {
+      "estado": "nao-se-aplica",
+      "evidencia": "site estático sem build nem teste; deploy por CLI"
+    },
+    "F5.testes": {
+      "estado": "nao-se-aplica",
+      "evidencia": "sem lógica testável isolada; prova é visual no navegador"
+    },
+    "F6.revisao": {
+      "estado": "feito",
+      "evidencia": "revisão de 25/11: achados corrigidos no PR do tema claro, resto em PENDENCIAS.md"
+    },
+    "F7.predeploy": {
+      "estado": "feito",
+      "evidencia": "pre-deploy 25/11 (site estático: sem build/teste/migration/env) + PR #2 e #3"
+    },
+    "F7.servido": {
+      "estado": "feito",
+      "evidencia": "deploy dpl_4YsDzvwCuXetMLXw8nsNEp6gSkAv + e7b7b38 no ar: pulsar.agconsultorialtda.com com --c-bg:#FFFFFF e style.css?v=2026-11-25-claro; trilho.json e *.md dão 404"
+    },
+    "F7.vigia": {
+      "estado": "feito",
+      "evidencia": "pulsar-site no radar da Vigia (ronda 24/11, radar 25/11)"
+    },
+    "F8.semcritico": {
+      "estado": "feito",
+      "evidencia": "revisão 25/11: zero segredo/PII; nenhum crítico aberto"
+    },
+    "F8.pendencias": {
+      "estado": "feito",
+      "evidencia": "PENDENCIAS.md"
+    },
+    "F8.dono": {
+      "estado": "espera-dono",
+      "evidencia": "aceite do Ricaliff no site servido"
+    }
+  },
+  "bloqueio": {
+    "texto": "aceite visual do tema claro",
+    "quem": "Ricaliff"
   }
 }
