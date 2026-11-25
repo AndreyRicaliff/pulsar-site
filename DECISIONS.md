@@ -47,3 +47,35 @@ problema por até 4 h.
 
 **Em entrevista.** "O HTML revalidava sempre, mas o CDN deixava CSS e JS 4 horas no navegador. Pus a versão na URL
 do asset: o HTML novo aponta para uma URL que nenhum cache tem, então HTML e CSS nunca se desencontram."
+
+## 2026-11-25 — [deploy] Comentário fica no fonte, o publicado sai sem nenhum
+
+**Problema.** Protocolo do Ricaliff de 25/11: "mantenha sempre no codigo original comentarios, publicados nao devem
+conter". O site era servido cru pela Vercel (o fonte ERA o publicado): a produção entregava 18 comentários no HTML
+(inclusive a nota interna "tirar quando os contatos reais entrarem"), 66 blocos `/* */` no CSS e os `//` do JS,
+inclusive os de dentro dos shaders GLSL. Comentário servido entrega arquitetura e nota interna a qualquer visitante.
+
+**Opções.** 1. Apagar os comentários do fonte (perde a documentação; o pedido manda manter). 2. Strip por regex no
+deploy (quebra fácil: `'// works'` e `https://` em string parecem comentário). 3. Build de minificação com parser:
+html-minifier-terser no HTML, esbuild no CSS e no JS, e um passo próprio para o GLSL, que mora dentro de string.
+
+**Decisão.** Opção 3. `npm run build` gera `dist/` a partir do fonte da raiz (que não é reescrito) e a Vercel publica
+só `dist/` (`vercel.json`: `installCommand`, `buildCommand`, `outputDirectory`). Os shaders são achados pelo AST do
+acorn (template literal com `gl_FragColor`/`gl_Position`/`precision`) e limpos antes do esbuild. O build termina com
+`scripts/sem-comentarios.mjs`, que relê `dist/` pelo parser e RECUSA o build se sobrar qualquer comentário (exceção:
+licença `/*!`). O CI (`.github/workflows/build.yml`) roda os testes e o build em todo PR.
+
+**Por quê.** Comentário é token para o parser, não texto: só o parser sabe que `'// '+x` é string e que `//` dentro do
+shader é comentário de outra linguagem. A conferência é fail-closed e independente do minificador: se uma versão nova do
+esbuild passar a manter comentário, o deploy para em vez de vazar. Os nomes dos arquivos não mudam, então o `?v=` do
+`index.html` continua valendo como estava. Prova de que nada mudou na tela: com `?static=1`, fonte e `dist/` deram os
+mesmos 958 elementos, o mesmo hash de estilo computado e geometria, o mesmo texto e o fundo WebGL compilando.
+
+**Consequências.** O site passa a ter build (Node, `npm ci`); `trilho.json`, `*.md` e o fonte cru não chegam mais ao
+público porque só `dist/` é publicado. Shader com `${}` no meio é recusado pelo build (cortar comentário entre pedaços
+de template poderia engolir código): se um dia precisar, tirar os comentários dele à mão. O `?v=` continua manual.
+
+**Em entrevista.** "O site estático era publicado cru, então todo comentário ia para o visitante. Pus um build que
+minifica com parser e publica só a saída, e no fim um conferente que relê a saída pelo parser e derruba o deploy se
+sobrar comentário. O detalhe foi o GLSL: o shader é uma string para o JavaScript, o minificador não entra nela, então
+limpei os templates de shader pelo AST antes de minificar."
