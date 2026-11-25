@@ -129,3 +129,26 @@ Blobs alheios · texto em gradiente · glassmorphism · tilt/reflexo · carrosse
 grid 2×2 perfeito · eyebrow CAPS repetido em toda seção · métrica fabricada · emoji como ícone ·
 moldura mac. Fonte: PADRAO-VISUAL §4 — a análise dos 5 sites não trouxe NENHUM deles, o que
 confirma a régua.
+
+## 8. Criativo bem desenvolvido — spec das artes (feedback de 25/11)
+
+> Feedback do Ricaliff sobre a 1ª leva aplicada em Finance e RH: "pulsos sem nexo, ou apenas
+> letras e números" não são arte. Esta seção é o piso de QUALQUER arte nova nos 3 sites e vale
+> acima dos exemplos pontuais das seções 2–6.
+
+1. **Cena de produto em camadas, nunca abstração.** A arte é uma composição: réplica de tela
+   com chrome real + 2–3 elementos sobrepostos (card de KPI, gráfico, notificação) saindo do
+   quadro, com sombra e profundidade (molde Bling). Mínimo 3 camadas: fundo tintado da rampa,
+   tela do produto, cards flutuantes com `--sombra-2`; luz e sombras na mesma direção.
+2. **Uma história concreta por arte**, amarrada ao texto da dobra: "fechamento do mês" mostra
+   um mini-DRE com a linha de resultado em destaque; "admissão" mostra o cartão do colaborador
+   com checklist marcada. Teste: quem olha a arte SEM ler o texto entende o que o produto faz.
+3. **Gráfico é desenhado de verdade**: barras/linha/donut em SVG com eixos, rótulos e valores
+   plausíveis — nunca linha decorativa solta.
+4. **O pulso vira assinatura discreta DENTRO da cena** (sparkline num card, divisor), nunca a
+   arte inteira.
+5. **Número/letra só dentro de card com contexto** (rótulo + variação + período). Tipografia
+   solta não é arte.
+6. Paleta e tipografia da casa; rótulo "dados ilustrativos" onde o dado for mock; sem foto
+   genérica de banco de imagem. Formato: SVG/HTML vetorial (nítido em qualquer tela e tema);
+   imagem gerada por IA só entra como arquivo fornecido pelo Ricaliff.
