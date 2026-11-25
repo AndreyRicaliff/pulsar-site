@@ -1,6 +1,10 @@
-# O site publica a raiz do repositório: tudo que não é página fica fora do deploy.
+# A Vercel roda `npm run build` e publica só dist/. O que sobe é o fonte para o build;
+# o que não entra no build fica fora do upload.
 *.md
 trilho.json
 .claude
 .vercel
+.github
 .gitignore
+node_modules
+dist

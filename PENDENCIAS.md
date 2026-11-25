@@ -23,5 +23,3 @@ Repo público: nada sensível aqui (credencial, dado pessoal, caminho de explora
 - 2026-11-25 — **Header fixo sobrepõe o rótulo das seções sticky.** O logo do header (canto superior esquerdo)
   cai em cima do `Sec__label` e, no celular, do título da seção (ex.: "Na palma da sua mão", "Ecossistema").
   Já acontecia no tema escuro; é ajuste de layout (respiro no topo das seções), fora do escopo do tema claro.
-- 2026-11-25 — **README aponta para fonte que não existe.** `README.md` diz "Fonte de verdade: `../pulsar.html`";
-  o arquivo não existe — a fonte é este repositório.

@@ -2,7 +2,7 @@
   "versao": 1,
   "projeto": "pulsar-site",
   "tipo": "produto-interno",
-  "objetivo": "Site institucional de apresentação do Pulsar (landing estática, deploy pela Vercel CLI).",
+  "objetivo": "Site institucional de apresentação do Pulsar (landing estática com build de minificação, deploy pela Vercel CLI).",
   "fase": "F8",
   "proximo": "Ricaliff olhar o site branco no ar e aceitar; depois aplicar INSPIRACAO.md §6 sobre o tema claro.",
   "atualizadoEm": "2026-11-25",
@@ -17,7 +17,7 @@
     },
     "F3.stack": {
       "estado": "feito",
-      "evidencia": "README.md (estático, sem build) + DECISIONS.md"
+      "evidencia": "README.md (estático + build que publica dist/ sem comentários) + DECISIONS.md"
     },
     "F4.repo": {
       "estado": "feito",
@@ -28,12 +28,12 @@
       "evidencia": "sem banco"
     },
     "F4.ci": {
-      "estado": "nao-se-aplica",
-      "evidencia": "site estático sem build nem teste; deploy por CLI"
+      "estado": "feito",
+      "evidencia": ".github/workflows/build.yml: npm test + npm run build (recusa comentário no publicado) em todo PR"
     },
     "F5.testes": {
-      "estado": "nao-se-aplica",
-      "evidencia": "sem lógica testável isolada; prova é visual no navegador"
+      "estado": "feito",
+      "evidencia": "scripts/build.test.mjs (limpeza de GLSL e conferência de comentários); a tela segue com prova visual"
     },
     "F6.revisao": {
       "estado": "feito",
