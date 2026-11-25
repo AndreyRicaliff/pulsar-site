@@ -1,0 +1,19 @@
+{
+  "versao": 1,
+  "projeto": "pulsar-site",
+  "tipo": "produto-interno",
+  "objetivo": "Site institucional de apresentação do Pulsar (landing estática, deploy pela Vercel CLI).",
+  "fase": "F7",
+  "proximo": "Deploy do tema claro pela Vercel CLI e conferência no domínio servido.",
+  "atualizadoEm": "2026-11-25",
+  "portoes": {
+    "F1.problema": { "estado": "feito", "evidencia": "README.md" },
+    "F2.lgpd": { "estado": "nao-se-aplica", "evidencia": "landing sem formulário, sem coleta de dado pessoal" },
+    "F3.stack": { "estado": "feito", "evidencia": "README.md (estático, sem build) + DECISIONS.md" },
+    "F4.repo": { "estado": "feito", "evidencia": "repositório público, auditado em 18/08 (CLAUDE.md)" },
+    "F4.rls": { "estado": "nao-se-aplica", "evidencia": "sem banco" },
+    "F4.ci": { "estado": "nao-se-aplica", "evidencia": "site estático sem build nem teste; deploy por CLI" },
+    "F5.testes": { "estado": "nao-se-aplica", "evidencia": "sem lógica testável isolada; prova é visual no navegador" },
+    "F6.revisao": { "estado": "feito", "evidencia": "revisão de 25/11: achados corrigidos no PR do tema claro, resto em PENDENCIAS.md" }
+  }
+}

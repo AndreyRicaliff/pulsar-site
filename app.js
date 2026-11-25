@@ -24,7 +24,11 @@ const snap=(x,h)=>{const i=Math.round(x);let d=x-i;const half=h/2;
    de hover com throttle senão metralha em lista. Opt-in persistido. */
 const Som = (() => {
   let ctx=null, master=null, bgmNodes=null, lastTick=0;
-  let enabled = localStorage.getItem('pulsar-som')==='1';
+  // localStorage lança com storage bloqueado (modo privado, política do navegador): sem a guarda o
+  // init do Som quebra, o boot não roda e o loading fica preso. Sem storage a preferência vale só na sessão.
+  const lerSom=()=>{try{return localStorage.getItem('pulsar-som')==='1';}catch{return false;}};
+  const gravarSom=on=>{try{localStorage.setItem('pulsar-som',on?'1':'0');}catch{return;}};
+  let enabled = lerSom();
   function ensure(){
     if(!ctx){
       ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -90,12 +94,12 @@ const Som = (() => {
   return {
     get enabled(){return enabled;},
     arm(on){ // chamado DENTRO do gesto do click de start
-      enabled=on; localStorage.setItem('pulsar-som',on?'1':'0');
+      enabled=on; gravarSom(on);
       if(on){ ensure(); bgmStart(); startPulse(); } else stopPulse();
       syncIcon();
     },
     toggle(){
-      enabled=!enabled; localStorage.setItem('pulsar-som',enabled?'1':'0');
+      enabled=!enabled; gravarSom(enabled);
       if(enabled){ ensure(); bgmStart(); startPulse(); } else { bgmStop(); stopPulse(); }
       syncIcon();
     },
@@ -308,16 +312,22 @@ float stars(vec2 uv,float scale,float t){
 }
 // ===== WARP / HIPERESPAÇO: estrelas riscando radialmente do centro (só no hero, via uHero) =====
 // ===== CENA COSMOS: pulsar sóbrio + ANÉIS DE PULSO concêntricos (motivo AG "pulso-anel") =====
+// TEMA CLARO = modelo de ABSORÇÃO (tinta sobre papel): cada cena devolve quanto de cada canal
+// absorve e a cor final é BG*(1-absorção). A_VIVO = 1-#7048E8 e A_SOBRIO = 1-#401C7F, então o
+// fundo só tinge na direção da marca e nunca escurece além dela (somar luz sobre branco satura).
+const vec3 BG=vec3(1.,.996,1.);
+const vec3 A_VIVO=vec3(.56,.72,.09);
+const vec3 A_SOBRIO=vec3(.75,.89,.50);
 vec3 sceneCosmos(vec2 uv){
-  vec3 col=vec3(0.);
+  vec3 a=vec3(0.);
   // fundo vivo e interativo (sem blob de luz): parallax de mouse por camada + nebulosa respirando
   vec2 m1=uv+uMouse*.015, m2=uv+uMouse*.03, m3=uv+uMouse*.05;
   float fog=fbm(m1*2.2+vec2(uTime*.055,uScroll*3.));
   float neb=fbm(m1*1.05+vec2(-uTime*.028,uScroll*1.4+7.3));
-  col+=vec3(.05,.045,.075)*fog+vec3(.11,.07,.19)*neb*neb*.8;
-  col+=vec3(.55,.5,.72)*stars(m1+vec2(0.,uScroll*1.2),22.,uTime)*.5;
-  col+=vec3(.5,.46,.66)*stars(m2+vec2(.3,uScroll*2.4),38.,uTime)*.32;
-  col+=vec3(.45,.42,.6)*stars(m3+vec2(.7,uScroll*4.0),64.,uTime)*.2;
+  a+=A_VIVO*(fog*.035+neb*neb*.10);
+  a+=A_VIVO*stars(m1+vec2(0.,uScroll*1.2),22.,uTime)*.42;
+  a+=A_VIVO*stars(m2+vec2(.3,uScroll*2.4),38.,uTime)*.28;
+  a+=A_VIVO*stars(m3+vec2(.7,uScroll*4.0),64.,uTime)*.18;
   // MALHA ondulante no topo (via uHero — esvai ao rolar): grade fina respirando,
   // centro limpo pro lockup. Minimalista: só linhas, baixa opacidade.
   vec2 gm=m1*7.0;
@@ -326,8 +336,8 @@ vec3 sceneCosmos(vec2 uv){
   vec2 gmf=abs(fract(gm)-.5);
   float mesh=smoothstep(.065,.05,min(gmf.x,gmf.y));
   float mmask=smoothstep(.24,.8,length(uv));
-  col+=vec3(.30,.22,.52)*mesh*mmask*.16*uHero;
-  return col;
+  a+=A_SOBRIO*mesh*mmask*.06*uHero;
+  return a;
 }
 // ===== CENA GRID/RADAR: mundo "achatado" de mission/vision (persp->orto via warp de uv, motivo pulso-piso) =====
 vec3 sceneGrid(vec2 uv){
@@ -336,11 +346,11 @@ vec3 sceneGrid(vec2 uv){
   vec2 g=mix(persp, uv*2.6, clamp(uMorph,0.,1.));            // uMorph: 0 perspectiva -> 1 top-down
   vec2 gf=abs(fract(g)-.5);
   float grid=smoothstep(.03,0.,min(gf.x,gf.y))/(1.+dot(g,g)*.04);
-  vec3 col=vec3(.03,.028,.05)+vec3(.25,.11,.5)*grid*.7;      // linhas #401C7F
+  vec3 a=A_VIVO*.02+A_SOBRIO*grid*.28;                       // linhas #401C7F
   float rr=length(g);
-  col+=vec3(.44,.28,.91)*smoothstep(.05,0.,abs(fract(rr*.5-uTime*.12)))*.12; // anéis de radar
-  col*=smoothstep(1.5,.15,length(uv));
-  return col;
+  a+=A_VIVO*smoothstep(.05,0.,abs(fract(rr*.5-uTime*.12)))*.10; // anéis de radar
+  a*=smoothstep(1.5,.15,length(uv));
+  return a;
 }
 void main(){
   vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;
@@ -352,10 +362,11 @@ void main(){
   float bow=-cos((fuv.x-.5)*3.14159)*uMorphVel*2.2;          // meio adianta/atrasa vs bordas -> arco
   float edge=2./uRes.y+abs(uMorphVel)*.35;                   // borda BORRA com a velocidade (motion blur)
   float sel=smoothstep(0.,edge,-fuv.y+uMorph*(1.0+edge)+bow);
-  vec3 col=mix(cosmos, grid, sel);
-  col*=1.-.42*length(uv)*(1.-uMorph*.35);
+  vec3 a=mix(cosmos, grid, sel);
+  a+=A_VIVO*.05*length(uv)*(1.-uMorph*.35);                  // vinheta vira véu lavanda nas bordas
+  vec3 col=BG*(1.-clamp(a,0.,1.));
   float bx=mod(gl_FragCoord.x,4.);float by=mod(gl_FragCoord.y,4.);
-  col+=(mod(bx*4.+by*3.+bx*by,16.)/16.-.5)*.03;
+  col+=(mod(bx*4.+by*3.+bx*by,16.)/16.-.5)*.012;
   gl_FragColor=vec4(col,1.);
 }`;
   function shader(type,src){
@@ -410,7 +421,7 @@ void main(){
 // desenhos generativos por projeto — substituem thumbs/vídeos, zero asset
 const Sketches = {
   finance(ctx,w,h,t){ // fluxo de linhas (fluxo de caixa)
-    ctx.strokeStyle='rgba(155,135,182,.65)';ctx.lineWidth=1;
+    ctx.strokeStyle='rgba(112,72,232,.65)';ctx.lineWidth=1;
     for(let i=0;i<5;i++){ctx.beginPath();
       for(let x=0;x<=w;x+=6){
         const y=h*.5+Math.sin(x*.012+t*.001+i*1.3)*h*.16*(1+i*.18)+Math.sin(x*.05+i)*3;
@@ -420,23 +431,23 @@ const Sketches = {
   lider(ctx,w,h,t){ // ranking de barras vivo
     const n=7;for(let i=0;i<n;i++){
       const v=(Math.sin(t*.0012+i*2.1)*.5+.5)*.8+.15;
-      ctx.fillStyle=i===2?'#7048E8':'rgba(155,135,182,.35)';
+      ctx.fillStyle=i===2?'#7048E8':'rgba(112,72,232,.35)';
       ctx.fillRect(14+i*((w-28)/n),h*.86-v*h*.66,(w-28)/n*.62,v*h*.66);}
-    ctx.fillStyle='rgba(155,135,182,.5)';ctx.fillRect(14,h*.86,w-28,1);
+    ctx.fillStyle='rgba(112,72,232,.5)';ctx.fillRect(14,h*.86,w-28,1);
   },
   beto(ctx,w,h,t){ // scatter vendas × estoque
     for(let i=0;i<46;i++){
       const a=Math.sin(i*12.9898)*43758.5453,r=(a-Math.floor(a));
       const b=Math.sin(i*78.233)*12543.2,r2=(b-Math.floor(b));
       const puls=.5+.5*Math.sin(t*.002+i);
-      ctx.fillStyle=`rgba(155,135,182,${.18+r2*.5*puls})`;
+      ctx.fillStyle=`rgba(112,72,232,${.18+r2*.5*puls})`;
       ctx.beginPath();ctx.arc(w*.08+r*w*.84,h*.12+r2*h*.76,1.4+r*2.2,0,7);ctx.fill();}
   },
   rh(ctx,w,h,t){ // grade de pessoas pulsando
     const cols=10,rows=5;
     for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
       const ph=Math.sin(t*.0016+x*.7+y*1.1)*.5+.5;
-      ctx.fillStyle=`rgba(155,135,182,${.12+ph*.55})`;
+      ctx.fillStyle=`rgba(112,72,232,${.12+ph*.55})`;
       ctx.fillRect(w*.1+x*w*.08,h*.16+y*h*.15,w*.045,w*.045);}
   },
   hub(ctx,w,h,t){ // curva de XP subindo
@@ -445,7 +456,7 @@ const Sketches = {
       const p=x/w,y=h*.85-Math.pow(p,1.7)*h*.6-Math.sin(p*22+t*.002)*4*p;
       x?ctx.lineTo(x,y):ctx.moveTo(x,y);}
     ctx.stroke();
-    ctx.setLineDash([2,5]);ctx.strokeStyle='rgba(155,135,182,.3)';
+    ctx.setLineDash([2,5]);ctx.strokeStyle='rgba(112,72,232,.3)';
     ctx.beginPath();ctx.moveTo(0,h*.25);ctx.lineTo(w,h*.25);ctx.stroke();ctx.setLineDash([]);
   },
 };
@@ -557,7 +568,7 @@ const LoadingBG = (() => {
     const g=34;
     for(let y=g/2;y<innerHeight;y+=g)for(let x=g/2;x<innerWidth;x+=g){
       const a=Math.sin(x*.02+t*.0008)*Math.cos(y*.017-t*.0006);
-      ctx.fillStyle=`rgba(255,255,255,${Math.max(0,a)*.16})`;
+      ctx.fillStyle=`rgba(112,72,232,${Math.max(0,a)*.22})`;
       ctx.fillRect(x,y,1.5,1.5);
     }
   }};
@@ -783,7 +794,8 @@ const Ribbon = (() => {
 
   // âncoras passam pelo scroll engine (senão o smooth wheel briga com o jump)
   $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
-    const el=$(a.getAttribute('href'));if(!el)return;
+    const h=a.getAttribute('href');if(h.length<2){e.preventDefault();return;} // href="#" (placeholder): querySelector('#') lança
+    const el=$(h);if(!el)return;
     e.preventDefault();document.body.dataset.menu='';
     Scroll.to(el);Som.select();
   }));
