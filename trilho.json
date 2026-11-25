@@ -41,11 +41,11 @@
     },
     "F7.predeploy": {
       "estado": "feito",
-      "evidencia": "pre-deploy 25/11 (site estático: sem build/teste/migration/env) + PR #2 e #3"
+      "evidencia": "pre-deploy 25/11 com o §2.5 (comentários no publicado): build, 6 testes, npm audit 0, CI verde no PR #5"
     },
     "F7.servido": {
       "estado": "feito",
-      "evidencia": "deploy dpl_4YsDzvwCuXetMLXw8nsNEp6gSkAv + e7b7b38 no ar: pulsar.agconsultorialtda.com com --c-bg:#FFFFFF e style.css?v=2026-11-25-claro; trilho.json e *.md dão 404"
+      "evidencia": "deploy dpl_6sXXsBeTBN42FfeCT8oVjdEgnmHT (74ee06a): pulsar.agconsultorialtda.com serve index/style.css/app.js ?v=2026-11-25-min byte a byte iguais ao dist/, zero comentários (scripts/sem-comentarios.mjs); trilho.json, *.md, package.json e scripts/ dão 404"
     },
     "F7.vigia": {
       "estado": "feito",
