@@ -418,27 +418,18 @@ void main(){
 })();
 
 /* ---------- [G] CANVASES 2D (loading, outro) + CENAS DOM ---------- */
-/* thumb flutuante dos works: segue o mouse com lerp; cada item acende a sua
+/* palco dos works: sempre visível; o hover em cada item acende a sua
    mini-cena de produto (DOM/SVG com chrome + card flutuante — spec §8) */
-const WorksThumb = (() => {
-  const fig=$('#works-thumb'), cap=$('#thumb-caption');
-  const scenes=$$('#works-thumb .Works__scene');
-  let tx=0,ty=0,x=0,y=0,on=false;
+(() => {
+  const cap=$('#stage-caption');
+  const scenes=$$('#works-stage .Works__scene');
+  if(!cap||!scenes.length)return;
   $$('.Works__item').forEach(li=>{
     li.addEventListener('pointerenter',()=>{
-      on=true;
-      cap.textContent='';
       scenes.forEach(s=>{const hit=s.dataset.scene===li.dataset.thumb;s.classList.toggle('on',hit);if(hit)cap.textContent=s.dataset.cap;});
-      fig.classList.add('is-on');Som.hoverTick();
+      Som.hoverTick();
     });
-    li.addEventListener('pointerleave',()=>{on=false;fig.classList.remove('is-on');});
   });
-  addEventListener('pointermove',e=>{tx=e.clientX+26;ty=e.clientY-120;},{passive:true});
-  return {update(){
-    if(!on&&!fig.classList.contains('is-on'))return;
-    x=lerp(x,tx,.13);y=lerp(y,ty,.13);
-    fig.style.transform=`translate(${Math.min(x,innerWidth-fig.offsetWidth-80)}px,${clamp(y,70,innerHeight-fig.offsetHeight-40)}px)`;
-  }};
 })();
 
 /* outro: partículas formam "PULSAR" quando a seção entra */
@@ -740,7 +731,6 @@ const Ribbon = (() => {
     if(!STATIC_MODE){
       GL.update(t);
       Choreo.update();
-      WorksThumb.update();
       Outro.update();
       LoadingBG.update(t);
       Showcase.update();
