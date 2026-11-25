@@ -3,7 +3,7 @@
    ENGINE — 7 módulos:
    [A] flags/utils  [B] som sintetizado  [C] scroll engine (lerp)
    [D] rail         [E] coreografia/reveals  [F] camada GL (shader)
-   [G] canvases 2D (loading, thumbs, demos, outro) + boot
+   [G] canvases 2D (loading, outro) + cenas DOM dos works + boot
    ============================================================ */
 
 /* ---------- [A] FLAGS + UTILS ---------- */
@@ -417,94 +417,21 @@ void main(){
   };
 })();
 
-/* ---------- [G] CANVASES 2D: loading, thumbs, demos, outro ---------- */
-// desenhos generativos por projeto — substituem thumbs/vídeos, zero asset
-const Sketches = {
-  finance(ctx,w,h,t){ // fluxo de linhas (fluxo de caixa)
-    ctx.strokeStyle='rgba(112,72,232,.65)';ctx.lineWidth=1;
-    for(let i=0;i<5;i++){ctx.beginPath();
-      for(let x=0;x<=w;x+=6){
-        const y=h*.5+Math.sin(x*.012+t*.001+i*1.3)*h*.16*(1+i*.18)+Math.sin(x*.05+i)*3;
-        x?ctx.lineTo(x,y):ctx.moveTo(x,y);
-      }ctx.stroke();}
-  },
-  lider(ctx,w,h,t){ // ranking de barras vivo
-    const n=7;for(let i=0;i<n;i++){
-      const v=(Math.sin(t*.0012+i*2.1)*.5+.5)*.8+.15;
-      ctx.fillStyle=i===2?'#7048E8':'rgba(112,72,232,.35)';
-      ctx.fillRect(14+i*((w-28)/n),h*.86-v*h*.66,(w-28)/n*.62,v*h*.66);}
-    ctx.fillStyle='rgba(112,72,232,.5)';ctx.fillRect(14,h*.86,w-28,1);
-  },
-  beto(ctx,w,h,t){ // scatter vendas × estoque
-    for(let i=0;i<46;i++){
-      const a=Math.sin(i*12.9898)*43758.5453,r=(a-Math.floor(a));
-      const b=Math.sin(i*78.233)*12543.2,r2=(b-Math.floor(b));
-      const puls=.5+.5*Math.sin(t*.002+i);
-      ctx.fillStyle=`rgba(112,72,232,${.18+r2*.5*puls})`;
-      ctx.beginPath();ctx.arc(w*.08+r*w*.84,h*.12+r2*h*.76,1.4+r*2.2,0,7);ctx.fill();}
-  },
-  rh(ctx,w,h,t){ // grade de pessoas pulsando
-    const cols=10,rows=5;
-    for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
-      const ph=Math.sin(t*.0016+x*.7+y*1.1)*.5+.5;
-      ctx.fillStyle=`rgba(112,72,232,${.12+ph*.55})`;
-      ctx.fillRect(w*.1+x*w*.08,h*.16+y*h*.15,w*.045,w*.045);}
-  },
-  hub(ctx,w,h,t){ // curva de XP subindo
-    ctx.strokeStyle='#7048E8';ctx.lineWidth=1.4;ctx.beginPath();
-    for(let x=0;x<=w;x+=5){
-      const p=x/w,y=h*.85-Math.pow(p,1.7)*h*.6-Math.sin(p*22+t*.002)*4*p;
-      x?ctx.lineTo(x,y):ctx.moveTo(x,y);}
-    ctx.stroke();
-    ctx.setLineDash([2,5]);ctx.strokeStyle='rgba(112,72,232,.3)';
-    ctx.beginPath();ctx.moveTo(0,h*.25);ctx.lineTo(w,h*.25);ctx.stroke();ctx.setLineDash([]);
-  },
-};
-
-const Canvas2D = (() => {
-  const items=[]; // {canvas,ctx,draw,visible}
-  function reg(canvas,drawName){
-    const ctx=canvas.getContext('2d');
-    const it={canvas,ctx,draw:Sketches[drawName],visible:false};
-    const io=new IntersectionObserver(es=>es.forEach(e=>it.visible=e.isIntersecting),{threshold:.05});
-    io.observe(canvas);
-    items.push(it);return it;
-  }
-  function size(it){
-    const r=it.canvas.getBoundingClientRect();
-    if(!r.width)return false;
-    const dpr=Math.min(devicePixelRatio,2);
-    if(it.canvas.width!==r.width*dpr){it.canvas.width=r.width*dpr;it.canvas.height=r.height*dpr;}
-    return true;
-  }
-  return {
-    reg,
-    update(t){
-      items.forEach(it=>{
-        if(!it.visible||!it.draw)return;
-        if(!size(it))return;
-        const {ctx,canvas}=it,dpr=Math.min(devicePixelRatio,2);
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        it.draw.call(Sketches,ctx,canvas.width/dpr,canvas.height/dpr,t);
-      });
-    },
-  };
-})();
-
-/* thumb flutuante dos works: segue o mouse com lerp, troca o sketch por item */
+/* ---------- [G] CANVASES 2D (loading, outro) + CENAS DOM ---------- */
+/* thumb flutuante dos works: segue o mouse com lerp; cada item acende a sua
+   mini-cena de produto (DOM/SVG com chrome + card flutuante — spec §8) */
 const WorksThumb = (() => {
   const fig=$('#works-thumb'), cap=$('#thumb-caption');
-  const it=Canvas2D.reg($('#thumb-canvas'),null);
-  it.visible=true;
+  const scenes=$$('#works-thumb .Works__scene');
   let tx=0,ty=0,x=0,y=0,on=false;
   $$('.Works__item').forEach(li=>{
     li.addEventListener('pointerenter',()=>{
-      it.draw=Sketches[li.dataset.thumb];on=true;
-      cap.textContent='// '+li.dataset.thumb;
+      on=true;
+      cap.textContent='';
+      scenes.forEach(s=>{const hit=s.dataset.scene===li.dataset.thumb;s.classList.toggle('on',hit);if(hit)cap.textContent=s.dataset.cap;});
       fig.classList.add('is-on');Som.hoverTick();
     });
-    li.addEventListener('pointerleave',()=>{on=false;it.draw=null;fig.classList.remove('is-on');});
+    li.addEventListener('pointerleave',()=>{on=false;fig.classList.remove('is-on');});
   });
   addEventListener('pointermove',e=>{tx=e.clientX+26;ty=e.clientY-120;},{passive:true});
   return {update(){
@@ -813,7 +740,6 @@ const Ribbon = (() => {
     if(!STATIC_MODE){
       GL.update(t);
       Choreo.update();
-      Canvas2D.update(t);
       WorksThumb.update();
       Outro.update();
       LoadingBG.update(t);
