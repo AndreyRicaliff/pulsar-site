@@ -804,7 +804,11 @@ body[data-modal="open"] .Modal__card{opacity:1;transform:none}
   /* no celular o palco vem ANTES da lista, no fluxo — criativo visível, não escondido */
   .Works__grid{grid-template-columns:1fr;gap:16px}
   .Works__stage{position:relative;top:auto;order:-1;margin-bottom:28px}
-  .KV__card{display:none}
+  /* dobra mobile: UM card de produto, no fluxo abaixo da marca (dois absolutos não cabem) */
+  .KV__stage{flex-direction:column}
+  .KV__card--r{display:none}
+  .KV__card--l{position:static;order:1;left:auto;bottom:auto;rotate:-1.5deg;
+    width:min(242px,78vw);margin-top:26px}
   .Rail{display:none}
   .Sec{padding-right:var(--pad)}
 }
