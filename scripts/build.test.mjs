@@ -31,3 +31,9 @@ test('conferência não confunde string, URL e licença com comentário', () => 
   assert.equal(comentariosJs("const u='https://x.y';const l='// works';/*! licença */").length, 0);
   assert.equal(comentariosHtml('<p>// works</p>').length, 0);
 });
+
+test('trecho GLSL sem main nem precision também é limpo e conferido', () => {
+  const js = 'const N=`uniform float uT; // tempo\nfloat h(float x){return x;}`;';
+  assert.ok(!limparShaders(js).includes('// tempo'));
+  assert.equal(comentariosJs(js).length, 1);
+});

@@ -8,7 +8,8 @@ import * as acorn from 'acorn';
 import * as walk from 'acorn-walk';
 
 const LICENCA = /^[!]|@license|@preserve/;
-const MARCA_GLSL = /gl_FragColor|gl_Position|precision\s+(highp|mediump|lowp)/;
+// Uma string é shader se tem qualquer marca de GLSL; o build limpa e a conferência relê pelo mesmo critério.
+export const MARCA_GLSL = /gl_FragColor|gl_Position|void\s+main\s*\(|precision\s+(highp|mediump|lowp)|\b(uniform|varying|attribute)\s+(float|vec[234]|mat[234]|sampler2D)\b/;
 
 export function comentariosHtml(html) {
   const achados = [];

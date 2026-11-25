@@ -67,8 +67,8 @@ licença `/*!`). O CI (`.github/workflows/build.yml`) roda os testes e o build e
 
 **Por quê.** Comentário é token para o parser, não texto: só o parser sabe que `'// '+x` é string e que `//` dentro do
 shader é comentário de outra linguagem. A conferência é fail-closed e independente do minificador: se uma versão nova do
-esbuild passar a manter comentário, o deploy para em vez de vazar. Os nomes dos arquivos não mudam, então o `?v=` do
-`index.html` continua valendo como estava. Prova de que nada mudou na tela: com `?static=1`, fonte e `dist/` deram os
+esbuild passar a manter comentário, o deploy para em vez de vazar. Os nomes dos arquivos não mudam, então o esquema `?v=`
+continua; a versão foi trocada para `2026-11-25-min`, senão o Cloudflare serviria o CSS/JS comentado do cache por até 4 h. Prova de que nada mudou na tela: com `?static=1`, fonte e `dist/` deram os
 mesmos 958 elementos, o mesmo hash de estilo computado e geometria, o mesmo texto e o fundo WebGL compilando.
 
 **Consequências.** O site passa a ter build (Node, `npm ci`); `trilho.json`, `*.md` e o fonte cru não chegam mais ao

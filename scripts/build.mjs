@@ -8,11 +8,10 @@ import * as acorn from 'acorn';
 import * as walk from 'acorn-walk';
 import { transform } from 'esbuild';
 import { minify as minificarHtml } from 'html-minifier-terser';
-import { conferirPasta } from './sem-comentarios.mjs';
+import { MARCA_GLSL, conferirPasta } from './sem-comentarios.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SAIDA = join(RAIZ, 'dist');
-const MARCA_GLSL = /gl_FragColor|gl_Position|precision\s+(highp|mediump|lowp)/;
 
 // GLSL não tem string, então `//` e `/* */` ali são sempre comentário. As quebras de linha
 // ficam: diretiva de pré-processador (#define, #ifdef) precisa terminar em linha própria.
